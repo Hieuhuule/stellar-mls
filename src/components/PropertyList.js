@@ -9,7 +9,6 @@ const PropertyList = () => {
   const [properties, setProperties] = useState([]);
 
   // state variable to manage the price filter checkbox state
-  const [filterHighPrice, setFilterHighPrice] = useState(false);
   const [filterKeywords, setFilterKeywords] = useState(false);
   const [filterPriceDifference, setFilterPriceDifference] = useState(false);
   const [ageFilter, setAgeFilter] = useState("");
@@ -36,14 +35,9 @@ const PropertyList = () => {
     fetchProperties();
   }, [headers]);
 
-  // function to handle the checkbox state change
-  const handleFilterChange = (event) => {
-    setFilterHighPrice(event.target.checked);
-  };
 
   // clear all filters
   const clearAllFilters = () => {
-    setFilterHighPrice(false);
     setFilterKeywords(false);
     setFilterPriceDifference(false);
     setFilterDaysOnMarketDifference(false);
@@ -70,6 +64,80 @@ const PropertyList = () => {
     return `${year}-${month}-${day}`;
   };
 
+  // export to CSV
+  const escapeCsvField = (field) => {
+    if (typeof field !== 'string') {
+      return field;
+    }
+    return `"${field.replace(/"/g, '""')}"`;
+  };
+
+  const exportToCSV = () => {
+    const filteredProperties = properties.filter(
+      (property) =>
+        (!filterKeywords || containsKeywords(property["PublicRemarks"])) &&
+        (!filterPriceDifference ||
+          (property["ListPrice"] !== property["PreviousListPrice"] &&
+            property["ListPrice"] !== property["OriginalListPrice"] &&
+            property["PreviousListPrice"] !== property["OriginalListPrice"])) &&
+        (ageFilter === "" ||
+          property["CumulativeDaysOnMarket"] >= parseInt(ageFilter)) &&
+        (!filterDaysOnMarketDifference ||
+          property["CumulativeDaysOnMarket"] !== property["DaysOnMarket"])
+    );
+
+    const headers = [
+      "Listing ID",
+      "Current Price",
+      "Previous Price",
+      "Original Price",
+      "Price Change Timestamp",
+      "City",
+      "County",
+      "List Date",
+      "Cumulative Days on Market",
+      "Days on Market",
+      "Agent",
+      "Agent Phone",
+      "Agent Email",
+      "Public Remarks",
+      "Private Remarks"
+    ];
+
+    const csvContent = filteredProperties.map((property) => [
+      property["ListingId"],
+      property["ListPrice"],
+      property["PreviousListPrice"],
+      property["OriginalListPrice"],
+      formatDate(property["PriceChangeTimestamp"]),
+      escapeCsvField(property["City"]),
+      escapeCsvField(property["CountyOrParish"]),
+      formatDate(property["ListDate"]),
+      property["CumulativeDaysOnMarket"],
+      property["DaysOnMarket"],
+      escapeCsvField(property["ListAgentFullName"]),
+      escapeCsvField(property["ListAgentDirectPhone"]),
+      escapeCsvField(property["ListAgentEmail"]),
+      escapeCsvField(property["PublicRemarks"]),
+      escapeCsvField(property["PrivateRemarks"])
+    ]);
+
+    const csvData = [
+      headers.join(","),
+      ...csvContent.map((row) => row.join(",")),
+    ].join("\n");
+
+  const csvBlob = new Blob([csvData], { type: "text/csv" });
+  const csvUrl = URL.createObjectURL(csvBlob);
+
+  const downloadLink = document.createElement("a");
+  downloadLink.href = csvUrl;
+  downloadLink.download = "property_list.csv";
+  document.body.appendChild(downloadLink);
+  downloadLink.click();
+  document.body.removeChild(downloadLink);
+};
+
   return (
     <>
       {/* checkbox input element */}
@@ -77,16 +145,7 @@ const PropertyList = () => {
         <div className={styles.box}>
           <h2>Filters</h2>
           <p>Filter the properties based on the following criteria:</p>
-          {/*Price filter checkbox*/}
-          <label className={styles.filterLabel}>
-            <input
-              className={styles.filterCheckbox}
-              type="checkbox"
-              checked={filterHighPrice}
-              onChange={handleFilterChange}
-            />
-            List Price 800,000+
-          </label>
+
           {/*Keywords filter checkbox*/}
           <label className={styles.filterLabel}>
             <input
@@ -95,7 +154,7 @@ const PropertyList = () => {
               checked={filterKeywords}
               onChange={(event) => setFilterKeywords(event.target.checked)}
             />
-            Keywords: "reduced" or "cozy"
+            Keywords: "reduced","cozy"
           </label>
           {/*2+ Price Change*/}
           <label className={styles.filterLabel}>
@@ -169,11 +228,18 @@ const PropertyList = () => {
               Clear age filter
             </label>
           </div>
+
+          {/* Clear all filters button */}
           <button
             className={styles.clearAllFiltersButton}
             onClick={clearAllFilters}
           >
             Clear All Filters
+          </button>
+
+          {/* Export to CSV button */}
+          <button className={styles.exportButton} onClick={exportToCSV}>
+            Export to CSV
           </button>
         </div>
       </div>
@@ -192,6 +258,9 @@ const PropertyList = () => {
             <th>List Date</th>
             <th>Cumulative Days on Market</th>
             <th>Days on Market</th>
+            <th>Agent</th>
+            <th>Agent Phone</th>
+            <th>Agent Email</th>
             <th>Public Remarks</th>
             <th>Private Remarks</th>
           </tr>
@@ -202,7 +271,6 @@ const PropertyList = () => {
             // filter the properties array based on the checkbox state
             .filter(
               (property) =>
-                (!filterHighPrice || property["ListPrice"] > 800000) &&
                 (!filterKeywords ||
                   containsKeywords(property["PublicRemarks"])) &&
                 (!filterPriceDifference ||
@@ -230,6 +298,9 @@ const PropertyList = () => {
                 <td>{formatDate(property["ListDate"])}</td>
                 <td>{property["CumulativeDaysOnMarket"]}</td>
                 <td>{property["DaysOnMarket"]}</td>
+                <td>{property["ListAgentFullName"]}</td>
+                <td>{property["ListAgentDirectPhone"]}</td>
+                <td>{property["ListAgentEmail"]}</td>
                 <td>{property["PublicRemarks"]}</td>
                 <td>{property["PrivateRemarks"]}</td>
               </tr>
