@@ -261,8 +261,7 @@ const PropertyList = () => {
             <th>Agent</th>
             <th>Agent Phone</th>
             <th>Agent Email</th>
-            <th>Public Remarks</th>
-            <th>Private Remarks</th>
+
           </tr>
         </thead>
         <tbody>
@@ -301,8 +300,7 @@ const PropertyList = () => {
                 <td>{property["ListAgentFullName"]}</td>
                 <td>{property["ListAgentDirectPhone"]}</td>
                 <td>{property["ListAgentEmail"]}</td>
-                <td>{property["PublicRemarks"]}</td>
-                <td>{property["PrivateRemarks"]}</td>
+
               </tr>
             ))}
         </tbody>

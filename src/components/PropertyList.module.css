@@ -59,7 +59,7 @@ h2 {
 .filterContainer {
   margin-bottom: 16px;
   position: sticky;
-  width: 125%;
+  width: 100%;
   top: 0;
   z-index: 100; /* optional: to ensure the headers are above other elements */
   background-color: #fff;
