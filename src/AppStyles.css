@@ -12,3 +12,21 @@ h1 {
   margin: 0;
   padding: 0;
 }
+
+/* Media Queries */
+
+/* For tablet devices */
+@media screen and (max-width: 768px) {
+  h1 {
+    font-size: 2rem;
+    padding: 16px;
+  }
+}
+
+/* For mobile devices */
+@media screen and (max-width: 480px) {
+  h1 {
+    font-size: 1.5rem;
+    padding: 8px;
+  }
+}
