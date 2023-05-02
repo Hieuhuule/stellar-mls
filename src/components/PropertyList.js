@@ -14,6 +14,7 @@ const PropertyList = () => {
   const [ageFilter, setAgeFilter] = useState("");
   const [filterDaysOnMarketDifference, setFilterDaysOnMarketDifference] =
     useState(false);
+  const [residentialFilter, setResidentialFilter] = useState(false);
 
   const headers = useMemo(
     () => ({
@@ -34,7 +35,6 @@ const PropertyList = () => {
 
     fetchProperties();
   }, [headers]);
-
 
   // clear all filters
   const clearAllFilters = () => {
@@ -66,7 +66,7 @@ const PropertyList = () => {
 
   // export to CSV
   const escapeCsvField = (field) => {
-    if (typeof field !== 'string') {
+    if (typeof field !== "string") {
       return field;
     }
     return `"${field.replace(/"/g, '""')}"`;
@@ -101,7 +101,7 @@ const PropertyList = () => {
       "Agent Phone",
       "Agent Email",
       "Public Remarks",
-      "Private Remarks"
+      "Private Remarks",
     ];
 
     const csvContent = filteredProperties.map((property) => [
@@ -119,7 +119,7 @@ const PropertyList = () => {
       escapeCsvField(property["ListAgentDirectPhone"]),
       escapeCsvField(property["ListAgentEmail"]),
       escapeCsvField(property["PublicRemarks"]),
-      escapeCsvField(property["PrivateRemarks"])
+      escapeCsvField(property["PrivateRemarks"]),
     ]);
 
     const csvData = [
@@ -127,16 +127,16 @@ const PropertyList = () => {
       ...csvContent.map((row) => row.join(",")),
     ].join("\n");
 
-  const csvBlob = new Blob([csvData], { type: "text/csv" });
-  const csvUrl = URL.createObjectURL(csvBlob);
+    const csvBlob = new Blob([csvData], { type: "text/csv" });
+    const csvUrl = URL.createObjectURL(csvBlob);
 
-  const downloadLink = document.createElement("a");
-  downloadLink.href = csvUrl;
-  downloadLink.download = "property_list.csv";
-  document.body.appendChild(downloadLink);
-  downloadLink.click();
-  document.body.removeChild(downloadLink);
-};
+    const downloadLink = document.createElement("a");
+    downloadLink.href = csvUrl;
+    downloadLink.download = "property_list.csv";
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+  };
 
   return (
     <>
@@ -145,6 +145,15 @@ const PropertyList = () => {
         <div className={styles.box}>
           <h2>Filters</h2>
           <p>Filter the properties based on the following criteria:</p>
+          {/*Property Type filter*/}
+          <label>
+            <input
+              type="checkbox"
+              checked={residentialFilter}
+              onChange={(e) => setResidentialFilter(e.target.checked)}
+            />
+            Residential
+          </label>
 
           {/*Keywords filter checkbox*/}
           <label className={styles.filterLabel}>
@@ -261,7 +270,6 @@ const PropertyList = () => {
             <th>Agent</th>
             <th>Agent Phone</th>
             <th>Agent Email</th>
-
           </tr>
         </thead>
         <tbody>
@@ -281,7 +289,9 @@ const PropertyList = () => {
                   property["CumulativeDaysOnMarket"] >= parseInt(ageFilter)) &&
                 (!filterDaysOnMarketDifference ||
                   property["CumulativeDaysOnMarket"] !==
-                    property["DaysOnMarket"])
+                    property["DaysOnMarket"]) &&
+                (!residentialFilter ||
+                  property["PropertyType"] === "Residential")
             )
 
             .map((property, index) => (
@@ -300,7 +310,6 @@ const PropertyList = () => {
                 <td>{property["ListAgentFullName"]}</td>
                 <td>{property["ListAgentDirectPhone"]}</td>
                 <td>{property["ListAgentEmail"]}</td>
-
               </tr>
             ))}
         </tbody>
