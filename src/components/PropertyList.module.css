@@ -1,6 +1,12 @@
 /* PropertyList.module.css */
 
 /* Table styling */
+
+.tableContainer {
+  max-height: 500px; /* adjust the height as needed */
+  overflow: auto;
+}
+
 .table {
   border-collapse: collapse;
   width: 100%;
@@ -17,10 +23,13 @@
   background-color: #f2f2f2;
 }
 
-.table thead {
-  background-color: #f2f2f2;
-  font-weight: bold;
+.table th {
+  background-color: #29235C;
+  position: sticky;
+  top: 200px;
+  z-index: 100; /* optional: to ensure the headers are above other elements */
 }
+
 
 th {
   background-color: #29235C;
@@ -43,12 +52,16 @@ h2 {
   display: inline-block;
   width: 100%;
   padding: 10px;
-  border: 1px solid #ccc;
+  border: 9px solid #ccc;
   border-radius: 4px;
 }
 
 .filterContainer {
   margin-bottom: 16px;
+  position: sticky;
+  top: 0;
+  z-index: 100; /* optional: to ensure the headers are above other elements */
+  background-color: #fff;
 }
 
 .filterCheckbox {
