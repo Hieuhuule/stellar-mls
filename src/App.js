@@ -1,5 +1,5 @@
 import React from 'react';
-import PropertyList from './PropertyList';
+import PropertyList from './components/PropertyList';
 
 function App() {
   return (
