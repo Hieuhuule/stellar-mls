@@ -11,11 +11,12 @@ const PropertyList = () => {
   // state variable to manage the price filter checkbox state
   const [filterHighPrice, setFilterHighPrice] = useState(false);
 
-  const headers = useMemo(() => ({
-    Authorization: `Bearer ${ACCESS_TOKEN}`,
-  }), []);
-  
-  
+  const headers = useMemo(
+    () => ({
+      Authorization: `Bearer ${ACCESS_TOKEN}`,
+    }),
+    []
+  );
 
   useEffect(() => {
     const fetchProperties = async () => {
@@ -39,14 +40,18 @@ const PropertyList = () => {
     <>
       {/* checkbox input element */}
       <div className={styles.filterContainer}>
-        <label className={styles.filterLabel}>
-          <input
-            type="checkbox"
-            checked={filterHighPrice}
-            onChange={handleFilterChange}
-          />
-          Show properties with List Price over 800,000
-        </label>
+        <div className={styles.box}>
+          <h2>Filters</h2>
+          <label className={styles.filterLabel}>
+            <input
+              className={styles.filterCheckbox}
+              type="checkbox"
+              checked={filterHighPrice}
+              onChange={handleFilterChange}
+            />
+            Show properties with List Price over 800,000
+          </label>
+        </div>
       </div>
 
       <table className={styles.table}>
