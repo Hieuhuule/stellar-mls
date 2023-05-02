@@ -41,6 +41,7 @@ const PropertyList = () => {
       {/* checkbox input element */}
       <div className={styles.filterContainer}>
         <div className={styles.box}>
+          <h2>Filters</h2>
           <label className={styles.filterLabel}>
             <input
               className={styles.filterCheckbox}

@@ -22,10 +22,26 @@
   font-weight: bold;
 }
 
+th {
+  background-color: #29235C;
+  font-weight: bold;
+  color: #FFFFFF;
+}
+
+td {
+  color: #29235C;
+}
+
+h2 {
+  color: #29235C;
+  text-align: left;
+}
+
 /* Checkbox styling */
 
 .box {
   display: inline-block;
+  width: 100%;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
