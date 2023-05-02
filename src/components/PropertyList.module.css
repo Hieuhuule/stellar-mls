@@ -26,8 +26,8 @@
 .table th {
   background-color: #29235C;
   position: sticky;
-  top: 200px;
-  z-index: 100; /* optional: to ensure the headers are above other elements */
+  top: 250px;
+  z-index: 75; /* optional: to ensure the headers are above other elements */
 }
 
 
@@ -73,4 +73,21 @@ h2 {
   margin-left: 8px;
   font-size: 14px;
   user-select: none; /* This disables text selection for the label */
+}
+
+/* Clear Filters Button styling */
+.clearAllFiltersButton {
+  background-color: #29235C;
+  color: #FFFFFF;
+  padding: 8px 16px;
+  font-size: 14px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  margin-top: 16px;
+  display: inline-block;
+}
+
+.clearAllFiltersButton:hover {
+  background-color: #444;
 }

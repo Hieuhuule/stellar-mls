@@ -41,6 +41,15 @@ const PropertyList = () => {
     setFilterHighPrice(event.target.checked);
   };
 
+  // clear all filters
+  const clearAllFilters = () => {
+    setFilterHighPrice(false);
+    setFilterKeywords(false);
+    setFilterPriceDifference(false);
+    setFilterDaysOnMarketDifference(false);
+    setAgeFilter("");
+  };
+
   const containsKeywords = (text) => {
     const keywords = ["reduced", "cozy"];
     return keywords.some((keyword) =>
@@ -160,6 +169,12 @@ const PropertyList = () => {
               Clear age filter
             </label>
           </div>
+          <button
+            className={styles.clearAllFiltersButton}
+            onClick={clearAllFilters}
+          >
+            Clear All Filters
+          </button>
         </div>
       </div>
 
@@ -171,6 +186,7 @@ const PropertyList = () => {
             <th>Previous Price</th>
             <th>Original Price</th>
             <th>Price Change Timestamp</th>
+            <th>Address</th>
             <th>City</th>
             <th>County</th>
             <th>List Date</th>
@@ -187,15 +203,19 @@ const PropertyList = () => {
             .filter(
               (property) =>
                 (!filterHighPrice || property["ListPrice"] > 800000) &&
-                (!filterKeywords || containsKeywords(property["PublicRemarks"])) &&
+                (!filterKeywords ||
+                  containsKeywords(property["PublicRemarks"])) &&
                 (!filterPriceDifference ||
                   (property["ListPrice"] !== property["PreviousListPrice"] &&
                     property["ListPrice"] !== property["OriginalListPrice"] &&
-                    property["PreviousListPrice"] !== property["OriginalListPrice"])) &&
-                (ageFilter === "" || property["CumulativeDaysOnMarket"] >= parseInt(ageFilter)) &&
-                (!filterDaysOnMarketDifference || property["CumulativeDaysOnMarket"] !== property["DaysOnMarket"])
+                    property["PreviousListPrice"] !==
+                      property["OriginalListPrice"])) &&
+                (ageFilter === "" ||
+                  property["CumulativeDaysOnMarket"] >= parseInt(ageFilter)) &&
+                (!filterDaysOnMarketDifference ||
+                  property["CumulativeDaysOnMarket"] !==
+                    property["DaysOnMarket"])
             )
-            
 
             .map((property, index) => (
               <tr key={index}>
@@ -204,6 +224,7 @@ const PropertyList = () => {
                 <td>{property["PreviousListPrice"]}</td>
                 <td>{property["OriginalListPrice"]}</td>
                 <td>{formatDate(property["PriceChangeTimestamp"])}</td>
+                <td>{property["UnparsedAddress"]}</td>
                 <td>{property["City"]}</td>
                 <td>{property["CountyOrParish"]}</td>
                 <td>{formatDate(property["ListDate"])}</td>
