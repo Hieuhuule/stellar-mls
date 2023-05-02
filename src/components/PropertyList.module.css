@@ -1,5 +1,15 @@
 /* PropertyList.module.css */
 
+/* General styling */
+h2 {
+  padding-left: 10px;
+}
+h3 {
+  margin-left: 10px;
+  color: #29235C;
+
+}
+
 /* Table styling */
 
 .tableContainer {
@@ -26,7 +36,7 @@
 .table th {
   background-color: #29235C;
   position: sticky;
-  top: 250px;
+  top: 0px;
   z-index: 75; /* optional: to ensure the headers are above other elements */
 }
 
@@ -58,10 +68,7 @@ h2 {
 
 .filterContainer {
   margin-bottom: 16px;
-  position: sticky;
   width: 100%;
-  top: 0;
-  z-index: 100; /* optional: to ensure the headers are above other elements */
   background-color: #fff;
 }
 
@@ -77,6 +84,33 @@ h2 {
   font-size: 14px;
   user-select: none; /* This disables text selection for the label */
 }
+
+/* Keyword Filter styling */
+.keywordBox {
+  border: #29235C 1px solid;
+  border-color: #444;
+  padding-left: 10px;
+}
+
+.keywordFilters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  max-width: 100%;
+  align-items: center;
+}
+
+.keywordItem {
+  display: flex;
+  gap: 4px;
+  margin-right: 16px;
+  margin-bottom: 8px;
+}
+
+.keywordLabel {
+  line-height: 1;
+}
+
 
 /* Clear Filters Button styling */
 .clearAllFiltersButton {
