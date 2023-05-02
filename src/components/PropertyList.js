@@ -36,6 +36,20 @@ const PropertyList = () => {
     setFilterHighPrice(event.target.checked);
   };
 
+  const formatDate = (dateString) => {
+    if (!dateString) return 'NA'; // return an 'NA' if dateString is not provided
+  
+    const date = new Date(dateString);
+  
+    if (isNaN(date.getTime())) return 'NaN-NaN-NaN'; // return 'NaN-NaN-NaN' if the date is invalid
+  
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+  
+  
   return (
     <>
       {/* checkbox input element */}
@@ -57,8 +71,15 @@ const PropertyList = () => {
       <table className={styles.table}>
         <thead>
           <tr>
-            <th>Property ID</th>
-            <th>List Price</th>
+            <th>Listing ID</th>
+            <th>Current Price</th>
+            <th>Previous Price</th>
+            <th>Original Price</th>
+            <th>Price Change Timestamp</th>
+            <th>City</th>
+            <th>County</th>
+            <th>Days on Market</th>
+            <th>Public Remarks</th>
           </tr>
         </thead>
         <tbody>
@@ -69,8 +90,16 @@ const PropertyList = () => {
             )
             .map((property, index) => (
               <tr key={index}>
-                <td>{property["@odata.id"]}</td>
+                <td>{property["ListingId"]}</td>
                 <td>{property["ListPrice"]}</td>
+                <td>{property["PreviousListPrice"]}</td>
+                <td>{property["OriginalListPrice"]}</td>
+                <td>{formatDate(property["PriceChangeTimestamp"])}</td>
+                <td>{property["City"]}</td>
+                <td>{property["CountyOrParish"]}</td>
+                <td>{property["CumulativeDaysOnMarket"]}</td>
+                <td>{property["PublicRemarks"]}</td>
+
               </tr>
             ))}
         </tbody>
