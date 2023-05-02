@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import axios from "axios";
 import styles from "./PropertyList.module.css";
 
-const API_BASE_URL = "https://api-demo.mlsgrid.com/v2/Property";
+const API_BASE_URL = "https://api-demo.mlsgrid.com/v2/Property?$top=5000";
 const ACCESS_TOKEN = "19cf3858acb8e0296488848bef6b32379af6b55c";
 
 const PropertyList = () => {
