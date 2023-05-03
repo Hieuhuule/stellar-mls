@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import axios from "axios";
 import styles from "./PropertyList.module.css";
-import Filter from "./Filter";
+import PriceChangeFilter from "./PriceChangeFilter";
 import KeywordFilter from "./KeywordFilter";
 import ExportToCSVButton from "./ExportToCSVButton";
 import { formatCurrency } from "./FormatCurrency";
@@ -161,6 +161,9 @@ const PropertyList = (props) => {
     "Industrial",
   ];
 
+  // automatically excludes these property statuses from StandardStatus
+  // const excludedStatuses = ["Sold", "Hold", "Pending", "Delete", "Incomplete", "Closed"];
+
   const [keywordFilters, setKeywordFilters] = useState(
     keywords.reduce((acc, keyword) => {
       acc[keyword] = false;
@@ -189,12 +192,14 @@ const PropertyList = (props) => {
         <div className={styles.box}>
           <h2>Filters</h2>
           <p>Filter the properties based on the following criteria:</p>
+
           {/*2+ Price Change*/}
-          <Filter
+          <PriceChangeFilter
             label="2+ Price Change"
-            checked={filterPriceDifference}
-            onChange={(event) => setFilterPriceDifference(event.target.checked)}
+            filterPriceDifference={filterPriceDifference}
+            setFilterPriceDifference={setFilterPriceDifference}
           />
+
           {/*Days on Market Discrepancy*/}
           <label className={styles.filterLabel}>
             <input
@@ -255,7 +260,7 @@ const PropertyList = (props) => {
               Clear age filter
             </label>
           </div>
-          
+
           {/*Keywords filter checkboxes*/}
           <div className={styles.keywordBox}>
             <h3>Keywords filter</h3>
@@ -287,6 +292,7 @@ const PropertyList = (props) => {
               filterDaysOnMarketDifference,
             }}
             excludedSubtypes={excludedSubtypes}
+            // excludedStatuses={excludedStatuses}
             containsSelectedKeywords={containsSelectedKeywords}
             formatDate={formatDate}
           />
@@ -337,15 +343,16 @@ const PropertyList = (props) => {
                       property["OriginalListPrice"])) &&
                 (!ageFilter ||
                   (ageFilter === "60-90" &&
-                    property["CumulativeDaysOnMarket"] >= 60 &&
-                    property["CumulativeDaysOnMarket"] <= 90) ||
+                    property["DaysOnMarket"] >= 60 &&
+                    property["DaysOnMarket"] <= 90) ||
                   (ageFilter === "90-180" &&
-                    property["CumulativeDaysOnMarket"] >= 90 &&
-                    property["CumulativeDaysOnMarket"] <= 180) ||
+                    property["DaysOnMarket"] >= 90 &&
+                    property["DaysOnMarket"] <= 180) ||
                   (ageFilter === "180-365" &&
-                    property["CumulativeDaysOnMarket"] >= 180 &&
-                    property["CumulativeDaysOnMarket"] <= 365)) &&
-                !excludedSubtypes.includes(property["PropertySubType"])
+                    property["DaysOnMarket"] >= 180 &&
+                    property["DaysOnMarket"] <= 365)) &&
+                !excludedSubtypes.includes(property["PropertySubType"]) /* &&
+                !excludedStatuses.includes(property["StandardStatus"]) */
             )
 
             .map((property, index) => (
