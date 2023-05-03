@@ -1,0 +1,26 @@
+/* Keyword Filter styling */
+.keywordBox {
+    border: #29235C 1px solid;
+    border-color: #444;
+    padding-left: 10px;
+  }
+  
+  .keywordFilters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    max-width: 100%;
+    align-items: center;
+  }
+  
+  .keywordItem {
+    display: flex;
+    gap: 4px;
+    margin-right: 16px;
+    margin-bottom: 8px;
+  }
+  
+  .keywordLabel {
+    line-height: 1;
+  }
+  

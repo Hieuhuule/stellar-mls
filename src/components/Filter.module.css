@@ -1,0 +1,28 @@
+/* Checkbox styling */
+
+.box {
+    display: inline-block;
+    width: 100%;
+    padding: 10px;
+    border: 9px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .filterContainer {
+    margin-bottom: 16px;
+    width: 100%;
+    background-color: #fff;
+  }
+  
+  .filterCheckbox {
+    vertical-align: middle;
+  }
+  
+  .filterLabel {
+    display: inline-block;
+    width: 10%;
+    margin-left: 10px;
+    margin-bottom: 5px;
+    font-size: 14px;
+    user-select: none; /* This disables text selection for the label */
+  }

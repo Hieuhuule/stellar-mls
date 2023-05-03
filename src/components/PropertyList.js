@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useMemo } from "react";
 import axios from "axios";
 import styles from "./PropertyList.module.css";
+import Filter from "./Filter";
+import KeywordFilter from "./KeywordFilter";
+import ExportToCSVButton from "./ExportToCSVButton";
 
 const API_BASE_URL = "https://api-demo.mlsgrid.com/v2/Property?$top=5000";
 const ACCESS_TOKEN = "19cf3858acb8e0296488848bef6b32379af6b55c";
@@ -151,142 +154,6 @@ const PropertyList = () => {
     return `${year}-${month}-${day}`;
   };
 
-  // export to CSV
-  const escapeCsvField = (field) => {
-    if (typeof field !== "string") {
-      return field;
-    }
-    return `"${field.replace(/"/g, '""')}"`;
-  };
-
-  const exportToCSV = () => {
-    const filteredProperties = properties.filter(
-      (property) =>
-        (!Object.values(keywordFilters).some((checked) => checked) ||
-          containsSelectedKeywords(property["PublicRemarks"])) &&
-        (!filterPriceDifference ||
-          (property["ListPrice"] !== property["PreviousListPrice"] &&
-            property["ListPrice"] !== property["OriginalListPrice"] &&
-            property["PreviousListPrice"] !== property["OriginalListPrice"])) &&
-        (ageFilter === "" ||
-          property["CumulativeDaysOnMarket"] >= parseInt(ageFilter)) &&
-        (!filterDaysOnMarketDifference ||
-          property["CumulativeDaysOnMarket"] !== property["DaysOnMarket"]) &&
-        !excludedSubtypes.includes(property["PropertySubType"])
-    );
-
-    const headers = [
-      "Listing ID",
-      "Current Price",
-      "Previous Price",
-      "Original Price",
-      "Price Change Timestamp",
-      "City",
-      "County",
-      "State",
-      "Subdivision",
-      "List Date",
-      "Bedrooms",
-      "Bathrooms Full",
-      "Bathrooms Half",
-      "Year Built",
-      "Lot Size (Acres)",
-      "Living Area (SqFt)",
-      "Property Type",
-      "Property Subtype",
-      "Property Description",
-      "Construction Materials",
-      "Community Features",
-      "Pool Features",
-      "Private Pool",
-      "Cooling",
-      "Heating",
-      "Fireplace",
-      "Flooring",
-      "Garage",
-      "Garage Spaces",
-      "Patio and Porch Features",
-      "Water Source",
-      "Waterfront",
-      "Sewer",
-      "Elementary School",
-      "Middle School",
-      "High School",
-      "Zoning",
-      "Cumulative Days on Market",
-      "Days on Market",
-      "Agent",
-      "Agent Phone",
-      "Agent Email",
-      "Agent Office",
-      "Public Remarks",
-      "Private Remarks",
-    ];
-
-    const csvContent = filteredProperties.map((property) => [
-      property["ListingId"],
-      property["ListPrice"],
-      property["PreviousListPrice"],
-      property["OriginalListPrice"],
-      formatDate(property["PriceChangeTimestamp"]),
-      escapeCsvField(property["City"]),
-      escapeCsvField(property["CountyOrParish"]),
-      escapeCsvField(property["StateOrProvince"]),
-      escapeCsvField(property["SubdivisionName"]),
-      formatDate(property["ListDate"]),
-      property["BedroomsTotal"],
-      property["BathroomsFull"],
-      property["BathroomsHalf"],
-      property["YearBuilt"],
-      property["LotSizeAcres"],
-      property["LivingArea"],
-      property["PropertyType"],
-      property["PropertySubType"],
-      escapeCsvField(property["MFR_PropertyDescription"]),
-      escapeCsvField((property?.["ConstructionMaterials"] ?? []).join(";")),
-      escapeCsvField((property?.["CommunityFeatures"] ?? []).join(";")),
-      escapeCsvField((property?.["PoolFeatures"] ?? []).join(";")),
-      property["PoolPrivateYN"],
-      escapeCsvField((property?.["Cooling"] ?? []).join(";")),
-      escapeCsvField((property?.["Heating"] ?? []).join(";")),
-      property["FireplaceYN"],
-      escapeCsvField((property?.["Flooring"] ?? []).join(";")),
-      property["GarageYN"],
-      property["GarageSpaces"],
-      escapeCsvField((property?.["PatioAndPorchFeatures"] ?? []).join(";")),
-      escapeCsvField(Array.isArray(property["WaterSource"]) ? property["WaterSource"].join(";") : property["WaterSource"]),
-      property["WaterfrontYN"],
-      escapeCsvField(Array.isArray(property["Sewer"]) ? property["Sewer"].join(";") : property["Sewer"]),
-      escapeCsvField(Array.isArray(property["ElementarySchool"]) ? property["ElementarySchool"].join(";") : property["ElementarySchool"]),
-      escapeCsvField(Array.isArray(property["MiddleOrJuniorSchool"]) ? property["MiddleOrJuniorSchool"].join(";") : property["MiddleOrJuniorSchool"]),
-      escapeCsvField(Array.isArray(property["HighSchool"]) ? property["HighSchool"].join(";") : property["HighSchool"]),
-      escapeCsvField(property["Zoning"]),
-      property["CumulativeDaysOnMarket"],
-      property["DaysOnMarket"],
-      escapeCsvField(property["ListAgentFullName"]),
-      escapeCsvField(property["ListAgentDirectPhone"]),
-      escapeCsvField(property["ListAgentEmail"]),
-      escapeCsvField(property["ListOfficeName"]),
-      escapeCsvField(property["PublicRemarks"]),
-      escapeCsvField(property["PrivateRemarks"]),
-    ]);
-
-    const csvData = [
-      headers.join(","),
-      ...csvContent.map((row) => row.join(",")),
-    ].join("\n");
-
-    const csvBlob = new Blob([csvData], { type: "text/csv" });
-    const csvUrl = URL.createObjectURL(csvBlob);
-
-    const downloadLink = document.createElement("a");
-    downloadLink.href = csvUrl;
-    downloadLink.download = "property_list.csv";
-    document.body.appendChild(downloadLink);
-    downloadLink.click();
-    document.body.removeChild(downloadLink);
-  };
-
   return (
     <>
       {/* checkbox input element */}
@@ -296,17 +163,12 @@ const PropertyList = () => {
           <p>Filter the properties based on the following criteria:</p>
 
           {/*2+ Price Change*/}
-          <label className={styles.filterLabel}>
-            <input
-              className={styles.filterCheckbox}
-              type="checkbox"
-              checked={filterPriceDifference}
-              onChange={(event) =>
-                setFilterPriceDifference(event.target.checked)
-              }
-            />
-            2+ Price Change
-          </label>
+          <Filter
+            label="2+ Price Change"
+            checked={filterPriceDifference}
+            onChange={(event) => setFilterPriceDifference(event.target.checked)}
+          />
+
           {/*Days on Market Discrepancy*/}
           <label className={styles.filterLabel}>
             <input
@@ -374,18 +236,12 @@ const PropertyList = () => {
             <h3>Keywords filter</h3>
             <div className={styles.keywordFilters}>
               {keywords.map((keyword, index) => (
-                <div key={index} className={styles.keywordItem}>
-                  <input
-                    type="checkbox"
-                    id={keyword}
-                    name={keyword}
-                    checked={keywordFilters[keyword]}
-                    onChange={handleKeywordCheckboxChange}
-                  />
-                  <label htmlFor={keyword} className={styles.keywordLabel}>
-                    {keyword}
-                  </label>
-                </div>
+                <KeywordFilter
+                  key={index}
+                  keyword={keyword}
+                  checked={keywordFilters[keyword]}
+                  onChange={handleKeywordCheckboxChange}
+                />
               ))}
             </div>
           </div>
@@ -399,9 +255,18 @@ const PropertyList = () => {
           </button>
 
           {/* Export to CSV button */}
-          <button className={styles.exportButton} onClick={exportToCSV}>
-            Export to CSV
-          </button>
+          <ExportToCSVButton
+            properties={properties}
+            filters={{
+              keywordFilters,
+              filterPriceDifference,
+              ageFilter,
+              filterDaysOnMarketDifference,
+            }}
+            excludedSubtypes={excludedSubtypes}
+            containsSelectedKeywords={containsSelectedKeywords}
+            formatDate={formatDate}
+          />
         </div>
       </div>
 
@@ -452,7 +317,7 @@ const PropertyList = () => {
                 (!filterDaysOnMarketDifference ||
                   property["CumulativeDaysOnMarket"] !==
                     property["DaysOnMarket"]) &&
-            (!excludedSubtypes.includes(property["PropertySubType"])) // Add this line
+                !excludedSubtypes.includes(property["PropertySubType"]) // Add this line
             )
 
             .map((property, index) => (
@@ -472,7 +337,9 @@ const PropertyList = () => {
                 <td>{property["BathroomsHalf"]}</td>
                 <td>{property["YearBuilt"]}</td>
                 <td>{property["LotSizeAcres"]}</td>
-                <td>{property["LivingArea"]} {property["LivingAreaUnits"]}</td>
+                <td>
+                  {property["LivingArea"]} {property["LivingAreaUnits"]}
+                </td>
                 <td>{property["PropertyType"]}</td>
                 <td>{property["PropertySubType"]}</td>
                 <td>{property["CumulativeDaysOnMarket"]}</td>
