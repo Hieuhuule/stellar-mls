@@ -120,6 +120,7 @@ const PropertyList = () => {
     "out of state",
   ];
 
+  // automatically excludes these property types
   const excludedSubtypes = [
     "Condominium",
     "Townhouse",
@@ -182,12 +183,42 @@ const PropertyList = () => {
       "Price Change Timestamp",
       "City",
       "County",
+      "State",
+      "Subdivision",
       "List Date",
+      "Bedrooms",
+      "Bathrooms Full",
+      "Bathrooms Half",
+      "Year Built",
+      "Lot Size (Acres)",
+      "Living Area (SqFt)",
+      "Property Type",
+      "Property Subtype",
+      "Property Description",
+      "Construction Materials",
+      "Community Features",
+      "Pool Features",
+      "Private Pool",
+      "Cooling",
+      "Heating",
+      "Fireplace",
+      "Flooring",
+      "Garage",
+      "Garage Spaces",
+      "Patio and Porch Features",
+      "Water Source",
+      "Waterfront",
+      "Sewer",
+      "Elementary School",
+      "Middle School",
+      "High School",
+      "Zoning",
       "Cumulative Days on Market",
       "Days on Market",
       "Agent",
       "Agent Phone",
       "Agent Email",
+      "Agent Office",
       "Public Remarks",
       "Private Remarks",
     ];
@@ -200,12 +231,42 @@ const PropertyList = () => {
       formatDate(property["PriceChangeTimestamp"]),
       escapeCsvField(property["City"]),
       escapeCsvField(property["CountyOrParish"]),
+      escapeCsvField(property["StateOrProvince"]),
+      escapeCsvField(property["SubdivisionName"]),
       formatDate(property["ListDate"]),
+      property["BedroomsTotal"],
+      property["BathroomsFull"],
+      property["BathroomsHalf"],
+      property["YearBuilt"],
+      property["LotSizeAcres"],
+      property["LivingArea"],
+      property["PropertyType"],
+      property["PropertySubType"],
+      escapeCsvField(property["MFR_PropertyDescription"]),
+      escapeCsvField((property?.["ConstructionMaterials"] ?? []).join(";")),
+      escapeCsvField((property?.["CommunityFeatures"] ?? []).join(";")),
+      escapeCsvField((property?.["PoolFeatures"] ?? []).join(";")),
+      property["PoolPrivateYN"],
+      escapeCsvField((property?.["Cooling"] ?? []).join(";")),
+      escapeCsvField((property?.["Heating"] ?? []).join(";")),
+      property["FireplaceYN"],
+      escapeCsvField((property?.["Flooring"] ?? []).join(";")),
+      property["GarageYN"],
+      property["GarageSpaces"],
+      escapeCsvField((property?.["PatioAndPorchFeatures"] ?? []).join(";")),
+      escapeCsvField(Array.isArray(property["WaterSource"]) ? property["WaterSource"].join(";") : property["WaterSource"]),
+      property["WaterfrontYN"],
+      escapeCsvField(Array.isArray(property["Sewer"]) ? property["Sewer"].join(";") : property["Sewer"]),
+      escapeCsvField(Array.isArray(property["ElementarySchool"]) ? property["ElementarySchool"].join(";") : property["ElementarySchool"]),
+      escapeCsvField(Array.isArray(property["MiddleOrJuniorSchool"]) ? property["MiddleOrJuniorSchool"].join(";") : property["MiddleOrJuniorSchool"]),
+      escapeCsvField(Array.isArray(property["HighSchool"]) ? property["HighSchool"].join(";") : property["HighSchool"]),
+      escapeCsvField(property["Zoning"]),
       property["CumulativeDaysOnMarket"],
       property["DaysOnMarket"],
       escapeCsvField(property["ListAgentFullName"]),
       escapeCsvField(property["ListAgentDirectPhone"]),
       escapeCsvField(property["ListAgentEmail"]),
+      escapeCsvField(property["ListOfficeName"]),
       escapeCsvField(property["PublicRemarks"]),
       escapeCsvField(property["PrivateRemarks"]),
     ]);
@@ -344,6 +405,7 @@ const PropertyList = () => {
         </div>
       </div>
 
+      {/* table element */}
       <table className={styles.table}>
         <thead>
           <tr>
@@ -355,7 +417,16 @@ const PropertyList = () => {
             <th>Address</th>
             <th>City</th>
             <th>County</th>
+            <th>Subdivision</th>
             <th>List Date</th>
+            <th>Bedrooms</th>
+            <th>Bathrooms Full</th>
+            <th>Bathrooms Half</th>
+            <th>Year Built</th>
+            <th>Lot Size Acres</th>
+            <th>Living Area</th>
+            <th>Property Type</th>
+            <th>Subtype</th>
             <th>Cumulative Days on Market</th>
             <th>Days on Market</th>
             <th>Agent</th>
@@ -394,7 +465,16 @@ const PropertyList = () => {
                 <td>{property["UnparsedAddress"]}</td>
                 <td>{property["City"]}</td>
                 <td>{property["CountyOrParish"]}</td>
+                <td>{property["SubdivisionName"]}</td>
                 <td>{formatDate(property["ListDate"])}</td>
+                <td>{property["BedroomsTotal"]}</td>
+                <td>{property["BathroomsFull"]}</td>
+                <td>{property["BathroomsHalf"]}</td>
+                <td>{property["YearBuilt"]}</td>
+                <td>{property["LotSizeAcres"]}</td>
+                <td>{property["LivingArea"]} {property["LivingAreaUnits"]}</td>
+                <td>{property["PropertyType"]}</td>
+                <td>{property["PropertySubType"]}</td>
                 <td>{property["CumulativeDaysOnMarket"]}</td>
                 <td>{property["DaysOnMarket"]}</td>
                 <td>{property["ListAgentFullName"]}</td>
