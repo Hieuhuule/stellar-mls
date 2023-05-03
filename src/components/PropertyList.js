@@ -4,11 +4,12 @@ import styles from "./PropertyList.module.css";
 import Filter from "./Filter";
 import KeywordFilter from "./KeywordFilter";
 import ExportToCSVButton from "./ExportToCSVButton";
+import { formatCurrency } from "./FormatCurrency";
 
 const API_BASE_URL = "https://api-demo.mlsgrid.com/v2/Property?$top=5000";
 const ACCESS_TOKEN = "19cf3858acb8e0296488848bef6b32379af6b55c";
 
-const PropertyList = () => {
+const PropertyList = (props) => {
   const [properties, setProperties] = useState([]);
 
   // state variable to manage the price filter checkbox state
@@ -44,6 +45,8 @@ const PropertyList = () => {
 
     fetchProperties();
   }, [headers]);
+
+
 
   // clear all filters
   const clearAllFilters = () => {
@@ -323,9 +326,9 @@ const PropertyList = () => {
             .map((property, index) => (
               <tr key={index}>
                 <td>{property["ListingId"]}</td>
-                <td>{property["ListPrice"]}</td>
-                <td>{property["PreviousListPrice"]}</td>
-                <td>{property["OriginalListPrice"]}</td>
+                <td>{formatCurrency(property["ListPrice"])}</td>
+                <td>{formatCurrency(property["PreviousListPrice"])}</td>
+                <td>{formatCurrency(property["OriginalListPrice"])}</td>
                 <td>{formatDate(property["PriceChangeTimestamp"])}</td>
                 <td>{property["UnparsedAddress"]}</td>
                 <td>{property["City"]}</td>
