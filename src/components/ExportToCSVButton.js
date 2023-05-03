@@ -100,7 +100,7 @@ const ExportToCSVButton = ({
     ];
 
     const csvContent = filteredProperties.map((property) => [
-      property["ListingId"].substring(4),
+      property["ListingId"].substring(3),
       formatCurrency(property["ListPrice"], false),
       formatCurrency(property["PreviousListPrice"], false),
       formatCurrency(property["OriginalListPrice"], false),

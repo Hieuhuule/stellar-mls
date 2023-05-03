@@ -350,7 +350,7 @@ const PropertyList = (props) => {
 
             .map((property, index) => (
               <tr key={index}>
-                <td>{property["ListingId"].substring(4)}</td>
+                <td>{property["ListingId"].substring(3)}</td>
                 <td>{formatCurrency(property["ListPrice"])}</td>
                 <td>{formatCurrency(property["PreviousListPrice"])}</td>
                 <td>{formatCurrency(property["OriginalListPrice"])}</td>
