@@ -129,20 +129,6 @@ h2 {
   background-color: #444;
 }
 
-/* Export Button styling */
-.exportButton {
-  display: inline-block;
-  background-color: #2d602d;
-  color: #FFFFFF;
-  padding: 8px 16px;
-  font-size: 14px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-top: 8px;
-  margin-left: 8px;
-}
-
 /* Media Queries */
 
 /* For tablet devices */
