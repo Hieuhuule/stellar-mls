@@ -6,8 +6,8 @@ import KeywordFilter from "./KeywordFilter";
 import ExportToCSVButton from "./ExportToCSVButton";
 import { formatCurrency } from "./FormatCurrency";
 
-const API_BASE_URL = "https://api-demo.mlsgrid.com/v2/Property?$top=5000";
-const ACCESS_TOKEN = "19cf3858acb8e0296488848bef6b32379af6b55c";
+const API_BASE_URL = "https://api.mlsgrid.com/v2/Property?$top=5000";
+const ACCESS_TOKEN = "7c0cc8a6877006b073dbc4cc978b45ba7c1cd6e2";
 
 const PropertyList = (props) => {
   const [properties, setProperties] = useState([]);
