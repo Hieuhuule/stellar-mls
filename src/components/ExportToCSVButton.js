@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./ExportToCSVButton.module.css";
-
+import { formatCurrency } from "./FormatCurrency";
 
 const ExportToCSVButton = ({ 
     properties, 
@@ -89,9 +89,9 @@ const ExportToCSVButton = ({
 
     const csvContent = filteredProperties.map((property) => [
       property["ListingId"],
-      property["ListPrice"],
-      property["PreviousListPrice"],
-      property["OriginalListPrice"],
+      formatCurrency(property["ListPrice"], false),
+      formatCurrency(property["PreviousListPrice"], false),
+      formatCurrency(property["OriginalListPrice"], false),
       formatDate(property["PriceChangeTimestamp"]),
       escapeCsvField(property["City"]),
       escapeCsvField(property["CountyOrParish"]),
