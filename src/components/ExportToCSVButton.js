@@ -36,14 +36,14 @@ const ExportToCSVButton = ({
           ageFilter === "" ||
           (ageFilter.includes("-")
             ? ageFilter === "60-90"
-              ? property["CumulativeDaysOnMarket"] >= 60 &&
-                property["CumulativeDaysOnMarket"] <= 90
+              ? property["DaysOnMarket"] >= 60 &&
+                property["DaysOnMarket"] <= 90
               : ageFilter === "90-180"
-              ? property["CumulativeDaysOnMarket"] >= 90 &&
-                property["CumulativeDaysOnMarket"] <= 180
-              : property["CumulativeDaysOnMarket"] >= 180 &&
-                property["CumulativeDaysOnMarket"] <= 365
-            : property["CumulativeDaysOnMarket"] >= parseInt(ageFilter))
+              ? property["DaysOnMarket"] >= 90 &&
+                property["DaysOnMarket"] <= 180
+              : property["DaysOnMarket"] >= 180 &&
+                property["DaysOnMarket"] <= 365
+            : property["DaysOnMarket"] >= parseInt(ageFilter))
         ) && (
           !filterDaysOnMarketDifference ||
             property["CumulativeDaysOnMarket"] !== property["DaysOnMarket"]
