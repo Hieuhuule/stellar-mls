@@ -161,6 +161,9 @@ const PropertyList = (props) => {
     "Industrial",
   ];
 
+  // automatically excludes these property statuses from StandardStatus
+  // const excludedStatuses = ["Sold", "Hold", "Pending", "Delete", "Incomplete", "Closed"];
+
   const [keywordFilters, setKeywordFilters] = useState(
     keywords.reduce((acc, keyword) => {
       acc[keyword] = false;
@@ -287,6 +290,7 @@ const PropertyList = (props) => {
               filterDaysOnMarketDifference,
             }}
             excludedSubtypes={excludedSubtypes}
+            // excludedStatuses={excludedStatuses}
             containsSelectedKeywords={containsSelectedKeywords}
             formatDate={formatDate}
           />
@@ -345,7 +349,8 @@ const PropertyList = (props) => {
                   (ageFilter === "180-365" &&
                     property["CumulativeDaysOnMarket"] >= 180 &&
                     property["CumulativeDaysOnMarket"] <= 365)) &&
-                !excludedSubtypes.includes(property["PropertySubType"])
+                !excludedSubtypes.includes(property["PropertySubType"]) /* &&
+                !excludedStatuses.includes(property["StandardStatus"]) */
             )
 
             .map((property, index) => (
