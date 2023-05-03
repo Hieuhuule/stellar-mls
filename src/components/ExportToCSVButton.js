@@ -2,19 +2,19 @@ import React from "react";
 import styles from "./ExportToCSVButton.module.css";
 import { formatCurrency } from "./FormatCurrency";
 
-const ExportToCSVButton = ({ 
-    properties, 
-    filters, 
-    excludedSubtypes,
-    containsSelectedKeywords,
-    formatDate,
- }) => {
-    const {
-        keywordFilters,
-        filterPriceDifference,
-        ageFilter,
-        filterDaysOnMarketDifference,
-    } = filters;
+const ExportToCSVButton = ({
+  properties,
+  filters,
+  excludedSubtypes,
+  containsSelectedKeywords,
+  formatDate,
+}) => {
+  const {
+    keywordFilters,
+    filterPriceDifference,
+    ageFilter,
+    filterDaysOnMarketDifference,
+  } = filters;
 
   const escapeCsvField = (field) => {
     if (typeof field !== "string") {
@@ -32,10 +32,22 @@ const ExportToCSVButton = ({
           (property["ListPrice"] !== property["PreviousListPrice"] &&
             property["ListPrice"] !== property["OriginalListPrice"] &&
             property["PreviousListPrice"] !== property["OriginalListPrice"])) &&
-        (ageFilter === "" ||
-          property["CumulativeDaysOnMarket"] >= parseInt(ageFilter)) &&
-        (!filterDaysOnMarketDifference ||
-          property["CumulativeDaysOnMarket"] !== property["DaysOnMarket"]) &&
+        (
+          ageFilter === "" ||
+          (ageFilter.includes("-")
+            ? ageFilter === "60-90"
+              ? property["CumulativeDaysOnMarket"] >= 60 &&
+                property["CumulativeDaysOnMarket"] <= 90
+              : ageFilter === "90-180"
+              ? property["CumulativeDaysOnMarket"] >= 90 &&
+                property["CumulativeDaysOnMarket"] <= 180
+              : property["CumulativeDaysOnMarket"] >= 180 &&
+                property["CumulativeDaysOnMarket"] <= 365
+            : property["CumulativeDaysOnMarket"] >= parseInt(ageFilter))
+        ) && (
+          !filterDaysOnMarketDifference ||
+            property["CumulativeDaysOnMarket"] !== property["DaysOnMarket"]
+        ) &&
         !excludedSubtypes.includes(property["PropertySubType"])
     );
 
@@ -171,7 +183,11 @@ const ExportToCSVButton = ({
     document.body.removeChild(downloadLink);
   };
 
-  return <button className={styles.exportButton} onClick={exportToCSV}>Export to CSV</button>;
+  return (
+    <button className={styles.exportButton} onClick={exportToCSV}>
+      Export to CSV
+    </button>
+  );
 };
 
 export default ExportToCSVButton;

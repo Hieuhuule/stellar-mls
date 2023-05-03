@@ -71,60 +71,88 @@ const PropertyList = (props) => {
   };
 
   const keywords = [
-    "probate",
-    "inherited",
-    "foreclosure",
-    "short sale",
-    "preforeclosure",
-    "estate",
+    "abandoned property",
+    "as-is",
+    "attorney-in-fact",
+    "ATTY-IN-FACT",
+    "auction",
+    "Bank-owned",
+    "basement issues",
+    "basement problems",
+    "basement repairs",
+    "below assessed value",
+    "Below market value",
     "bring all offers",
-    "junker",
-    "must sell",
-    "investor special",
-    "special warranty deed",
-    "quit claim deed",
-    "heir",
-    "heirs",
-    "TLC",
-    "motivated",
+    "cash flow",
+    "cash only",
+    "Distressed Properties",
+    "do not disturb tenant",
+    "engineer report",
+    "estate",
+    "estate sale",
     "fixer",
     "fixer upper",
     "fixer-upper",
-    "repairs",
-    "as-is",
-    "relocation",
-    "rented",
-    "tenant",
-    "do not disturb tenant",
+    "flipping",
+    "foreclosure",
+    "foundation issues",
+    "foundation problems",
+    "foundation repairs",
+    "heir",
+    "heirs",
+    "hidden gem",
+    "high ROI",
+    "inherited",
+    "investor special",
+    "investment opportunity",
+    "junker",
+    "lease option",
+    "leak",
+    "low inventory",
+    "motivated",
+    "motivated seller",
+    "multi-unit",
+    "must sell",
+    "no FHA",
+    "not responsible",
+    "off market",
+    "opportunity zone",
+    "out of state",
+    "owner finance",
+    "owner financing",
     "owner will carry",
     "owner will carry 2nd",
-    "owner finance",
     "owner will finance",
     "personal rep",
     "personal representative",
-    "estate",
-    "trustee",
-    "basement issues",
-    "basement repairs",
-    "basement problems",
-    "foundation issues",
-    "foundation repairs",
-    "foundation problems",
-    "structural issues",
-    "structural repairs",
-    "structural problems",
-    "no FHA",
-    "lease option",
-    "engineer report",
+    "preforeclosure",
+    "pre-foreclosure",
     "price change",
-    "water issues",
-    "leak",
-    "water problems",
-    "not responsible",
+    "probate",
+    "probate sale",
+    "quick close",
+    "quit claim deed",
+    "relocation",
     "relocated",
+    "renovation",
+    "rental property",
+    "repairs",
+    "rented",
+    "seller financing",
+    "short sale",
+    "special warranty deed",
+    "structural issues",
+    "structural problems",
+    "structural repairs",
+    "TLC",
+    "tenant",
+    "trustee",
     "vacant",
-    "out of state",
+    "value-add",
+    "water issues",
+    "water problems",
   ];
+  
 
   // automatically excludes these property types
   const excludedSubtypes = [
@@ -193,33 +221,33 @@ const PropertyList = (props) => {
                 className={styles.filterRadio}
                 type="radio"
                 name="ageFilter"
-                value="90"
-                checked={ageFilter === "90"}
+                value="60-90"
+                checked={ageFilter === "60-90"}
                 onChange={(event) => setAgeFilter(event.target.value)}
               />
-              90 days+
+              60-90 days
             </label>
             <label className={styles.filterLabel}>
               <input
                 className={styles.filterRadio}
                 type="radio"
                 name="ageFilter"
-                value="180"
-                checked={ageFilter === "180"}
+                value="90-180"
+                checked={ageFilter === "90-180"}
                 onChange={(event) => setAgeFilter(event.target.value)}
               />
-              6 months+
+              90-180 days
             </label>
             <label className={styles.filterLabel}>
               <input
                 className={styles.filterRadio}
                 type="radio"
                 name="ageFilter"
-                value="365"
-                checked={ageFilter === "365"}
+                value="180-365"
+                checked={ageFilter === "180-365"}
                 onChange={(event) => setAgeFilter(event.target.value)}
               />
-              1 year+
+              180-365 days
             </label>
             <label className={styles.filterLabel}>
               <input
@@ -325,7 +353,7 @@ const PropertyList = (props) => {
 
             .map((property, index) => (
               <tr key={index}>
-                <td>{property["ListingId"]}</td>
+                <td>{property["ListingId"].substring(4)}</td>
                 <td>{formatCurrency(property["ListPrice"])}</td>
                 <td>{formatCurrency(property["PreviousListPrice"])}</td>
                 <td>{formatCurrency(property["OriginalListPrice"])}</td>
