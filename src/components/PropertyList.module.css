@@ -85,30 +85,12 @@ h2 {
   user-select: none; /* This disables text selection for the label */
 }
 
-/* Keyword Filter styling */
-.keywordBox {
-  border: #29235C 1px solid;
-  border-color: #444;
-  padding-left: 10px;
-}
+/* PropertyList.module.css */
 
-.keywordFilters {
-  display: flex;
-  flex-wrap: wrap;
+.keywordFilterContainer {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: 8px;
-  max-width: 100%;
-  align-items: center;
-}
-
-.keywordItem {
-  display: flex;
-  gap: 4px;
-  margin-right: 16px;
-  margin-bottom: 8px;
-}
-
-.keywordLabel {
-  line-height: 1;
 }
 
 

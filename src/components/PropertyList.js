@@ -46,8 +46,6 @@ const PropertyList = (props) => {
     fetchProperties();
   }, [headers]);
 
-
-
   // clear all filters
   const clearAllFilters = () => {
     setFilterPriceDifference(false);
@@ -152,7 +150,6 @@ const PropertyList = (props) => {
     "water issues",
     "water problems",
   ];
-  
 
   // automatically excludes these property types
   const excludedSubtypes = [
@@ -192,14 +189,12 @@ const PropertyList = (props) => {
         <div className={styles.box}>
           <h2>Filters</h2>
           <p>Filter the properties based on the following criteria:</p>
-
           {/*2+ Price Change*/}
           <Filter
             label="2+ Price Change"
             checked={filterPriceDifference}
             onChange={(event) => setFilterPriceDifference(event.target.checked)}
           />
-
           {/*Days on Market Discrepancy*/}
           <label className={styles.filterLabel}>
             <input
@@ -212,7 +207,6 @@ const PropertyList = (props) => {
             />
             Days on Market Discrepancy
           </label>
-
           <h3>Age filter</h3>
           {/*Age filter radio buttons*/}
           <div className={styles.radioGroup}>
@@ -261,11 +255,11 @@ const PropertyList = (props) => {
               Clear age filter
             </label>
           </div>
-
+          
           {/*Keywords filter checkboxes*/}
           <div className={styles.keywordBox}>
             <h3>Keywords filter</h3>
-            <div className={styles.keywordFilters}>
+            <div className={styles.keywordFilterContainer}>
               {keywords.map((keyword, index) => (
                 <KeywordFilter
                   key={index}
@@ -276,7 +270,6 @@ const PropertyList = (props) => {
               ))}
             </div>
           </div>
-
           {/* Clear all filters button */}
           <button
             className={styles.clearAllFiltersButton}
@@ -284,7 +277,6 @@ const PropertyList = (props) => {
           >
             Clear All Filters
           </button>
-
           {/* Export to CSV button */}
           <ExportToCSVButton
             properties={properties}
@@ -343,12 +335,17 @@ const PropertyList = (props) => {
                     property["ListPrice"] !== property["OriginalListPrice"] &&
                     property["PreviousListPrice"] !==
                       property["OriginalListPrice"])) &&
-                (ageFilter === "" ||
-                  property["CumulativeDaysOnMarket"] >= parseInt(ageFilter)) &&
-                (!filterDaysOnMarketDifference ||
-                  property["CumulativeDaysOnMarket"] !==
-                    property["DaysOnMarket"]) &&
-                !excludedSubtypes.includes(property["PropertySubType"]) // Add this line
+                (!ageFilter ||
+                  (ageFilter === "60-90" &&
+                    property["CumulativeDaysOnMarket"] >= 60 &&
+                    property["CumulativeDaysOnMarket"] <= 90) ||
+                  (ageFilter === "90-180" &&
+                    property["CumulativeDaysOnMarket"] >= 90 &&
+                    property["CumulativeDaysOnMarket"] <= 180) ||
+                  (ageFilter === "180-365" &&
+                    property["CumulativeDaysOnMarket"] >= 180 &&
+                    property["CumulativeDaysOnMarket"] <= 365)) &&
+                !excludedSubtypes.includes(property["PropertySubType"])
             )
 
             .map((property, index) => (

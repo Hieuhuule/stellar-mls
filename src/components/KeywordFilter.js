@@ -3,7 +3,7 @@ import styles from "./KeywordFilter.module.css";
 
 const KeywordFilter = ({ keyword, checked, onChange }) => {
   return (
-    <div className={styles.keywordItem}>
+    <div className={`${styles.KeywordFilter} ${styles.keywordItem}`}>
       <input
         type="checkbox"
         id={keyword}
