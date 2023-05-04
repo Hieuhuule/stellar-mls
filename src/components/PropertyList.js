@@ -11,7 +11,7 @@ import ClearFilters from "./ClearFilters";
 import FilteredProperties from "./FilteredProperties";
 import TableHeader from "./TableHeader";
 
-const API_BASE_URL = "https://api.mlsgrid.com/v2/Property?$top=5000";
+const API_BASE_URL = "https://api.mlsgrid.com/v2/Property?$top=500";
 const ACCESS_TOKEN = "7c0cc8a6877006b073dbc4cc978b45ba7c1cd6e2";
 
 const PropertyList = (props) => {
@@ -38,6 +38,37 @@ const PropertyList = (props) => {
     []
   );
 
+  // PAGINATION - USE WHEN READY TO LOAD ALL DATA
+  // useEffect(() => {
+  //   const fetchPaginatedProperties = async (url, allProperties = []) => {
+  //     try {
+  //       const response = await axios.get(url, { headers });
+  //       console.log("Fetched data from URL:", url); // Log the URL being fetched
+  //       console.log("Fetched data:", response.data); // Log the fetched data
+        
+  //       const newProperties = allProperties.concat(response.data.value);
+  //       console.log("New properties:", newProperties); // Log the updated properties array
+  
+  //       if (response.data["@odata.nextLink"]) {
+  //         return await fetchPaginatedProperties(response.data["@odata.nextLink"], newProperties);
+  //       } else {
+  //         return newProperties;
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching properties:", error);
+  //       return allProperties;
+  //     }
+  //   };
+  
+  //   const fetchProperties = async () => {
+  //     const allProperties = await fetchPaginatedProperties(API_BASE_URL);
+  //     console.log("All properties:", allProperties); // Log the final accumulated properties array
+  //     setProperties(allProperties);
+  //   };
+  
+  //   fetchProperties();
+  // }, [headers]);
+  
   useEffect(() => {
     const fetchProperties = async () => {
       try {
