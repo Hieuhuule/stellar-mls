@@ -3,7 +3,7 @@ import axios from "axios";
 import styles from "./PropertyList.module.css";
 import PriceChangeFilter from "./PriceChangeFilter";
 import { keywords } from "./KeywordFilter";
-import { KeywordsFilterList } from "./KeywordFilter";
+import { KeywordsFilterList, containsSelectedKeywords } from "./KeywordFilter";
 import ExportToCSVButton from "./ExportToCSVButton";
 import AgeFilter from "./AgeFilter";
 import { formatDate } from "../utils";
@@ -61,15 +61,6 @@ const PropertyList = (props) => {
         acc[keyword] = false;
         return acc;
       }, {})
-    );
-  };
-
-  // keywords filter
-  const containsSelectedKeywords = (text) => {
-    return keywords.some(
-      (keyword) =>
-        keywordFilters[keyword] &&
-        text.toLowerCase().includes(keyword.toLowerCase())
     );
   };
 
@@ -164,7 +155,9 @@ const PropertyList = (props) => {
               filterDaysOnMarketDifference,
             }}
             excludedSubtypes={excludedSubtypes}
-            containsSelectedKeywords={containsSelectedKeywords}
+            containsSelectedKeywords={(text) =>
+              containsSelectedKeywords(text, keywordFilters)
+            }
             formatDate={formatDate}
           />
         </tbody>

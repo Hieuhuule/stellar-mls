@@ -119,5 +119,13 @@ const KeywordsFilterList = ({ keywordFilters, handleKeywordCheckboxChange }) => 
   );
 };
 
+export const containsSelectedKeywords = (text, keywordFilters) => {
+  return keywords.every(
+    (keyword) =>
+      !keywordFilters[keyword] || text.toLowerCase().includes(keyword.toLowerCase())
+  );
+};
+
+
 
 export { KeywordsFilterList };
