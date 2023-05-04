@@ -1,6 +1,6 @@
 // FilteredProperties.js
-import React from "react";
-import PropertyRow from "./PropertyRow";
+import React from 'react';
+import PropertyRow from './PropertyRow';
 
 const FilteredProperties = ({
   properties,
@@ -8,15 +8,8 @@ const FilteredProperties = ({
   excludedSubtypes,
   containsSelectedKeywords,
   formatDate,
-  cityFilter,
-  countyFilter,
 }) => {
-  const {
-    keywordFilters,
-    filterPriceDifference,
-    ageFilter,
-    filterDaysOnMarketDifference,
-  } = filters;
+  const { keywordFilters, filterPriceDifference, ageFilter, filterDaysOnMarketDifference } = filters;
 
   const isAgeFilterMatch = (property, ageFilter) => {
     const daysOnMarket = property.DaysOnMarket;
@@ -32,17 +25,6 @@ const FilteredProperties = ({
   };
 
   const filteredProperties = properties
-    .filter((property) => {
-      // Apply city filter
-      return !cityFilter || property.City === cityFilter;
-    })
-    .filter((property) => {
-      // Apply county filter
-      return (
-        !countyFilter.length ||
-        countyFilter.some((county) => property.CountyOrParish === county)
-      );
-    })
     .filter((property) => {
       // Apply subtype exclusion
       return !excludedSubtypes.includes(property.PropertyType);
