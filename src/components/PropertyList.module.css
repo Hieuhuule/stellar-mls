@@ -18,10 +18,10 @@ h3 {
 }
 
 .table {
-  border-collapse: collapse;
   width: 100%;
-  text-align: left;
+  border-collapse: collapse;
 }
+
 
 .table th,
 .table td {
@@ -93,23 +93,6 @@ h2 {
   gap: 8px;
 }
 
-
-/* Clear Filters Button styling */
-.clearAllFiltersButton {
-  background-color: #29235C;
-  color: #FFFFFF;
-  padding: 8px 16px;
-  font-size: 14px;
-  border-radius: 4px;
-  border: none;
-  cursor: pointer;
-  margin-top: 16px;
-  display: inline-block;
-}
-
-.clearAllFiltersButton:hover {
-  background-color: #444;
-}
 
 /* Media Queries */
 
