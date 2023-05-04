@@ -1,0 +1,97 @@
+/* PropertyRow.module.css */
+.propertyRow {
+    /* Add any common styles for table headers */
+  }
+  
+  .listingId {
+    min-width: 100px;
+  }
+  
+  .currentPrice {
+    min-width: 100px;
+  }
+  
+  .previousPrice {
+    min-width: 100px;
+  }
+  
+  .originalPrice {
+    min-width: 100px;
+  }
+  
+  .priceChangeTimestamp {
+    min-width: 130px;
+  }
+  
+  .address {
+    min-width: 200px;
+  }
+  
+  .city {
+    min-width: 100px;
+  }
+  
+  .county {
+    min-width: 100px;
+  }
+  
+  .subdivision {
+    min-width: 100px;
+  }
+  
+  .listDate {
+    min-width: 100px;
+  }
+  
+  .bedrooms {
+    min-width: 80px;
+  }
+  
+  .bathroomsFull {
+    min-width: 100px;
+  }
+  
+  .bathroomsHalf {
+    min-width: 100px;
+  }
+  
+  .yearBuilt {
+    min-width: 80px;
+  }
+  
+  .lotSizeAcres {
+    min-width: 100px;
+  }
+  
+  .livingArea {
+    min-width: 100px;
+  }
+  
+  .propertyType {
+    min-width: 100px;
+  }
+  
+  .subtype {
+    min-width: 100px;
+  }
+  
+  .cumulativeDaysOnMarket {
+    min-width: 130px;
+  }
+  
+  .daysOnMarket {
+    min-width: 100px;
+  }
+  
+  .agent {
+    min-width: 150px;
+  }
+  
+  .agentPhone {
+    min-width: 100px;
+  }
+  
+  .agentEmail {
+    min-width: 150px;
+  }
+  
