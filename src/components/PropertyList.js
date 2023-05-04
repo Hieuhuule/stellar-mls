@@ -11,7 +11,7 @@ import ClearFilters from "./ClearFilters";
 import FilteredProperties from "./FilteredProperties";
 import TableHeader from "./TableHeader";
 
-const API_BASE_URL = "https://api.mlsgrid.com/v2/Property?$top=500";
+const API_BASE_URL = "https://api.mlsgrid.com/v2/Property?$filter=OriginatingSystemName%20eq%20%27mfrmls%27%20and%20MlgCanView%20eq%20true%20and%20StandardStatus%20eq%20%27Active%27&$top=5000";
 const ACCESS_TOKEN = "7c0cc8a6877006b073dbc4cc978b45ba7c1cd6e2";
 
 const PropertyList = (props) => {
@@ -37,8 +37,8 @@ const PropertyList = (props) => {
     }),
     []
   );
-
-  // PAGINATION - USE WHEN READY TO LOAD ALL DATA
+  
+  // PAGINATION - USE WHEN READY TO DEPLOY
   // useEffect(() => {
   //   const fetchPaginatedProperties = async (url, allProperties = []) => {
   //     try {
@@ -69,6 +69,7 @@ const PropertyList = (props) => {
   //   fetchProperties();
   // }, [headers]);
   
+  // NO PAGINATION - USE WHEN TESTING
   useEffect(() => {
     const fetchProperties = async () => {
       try {
@@ -82,7 +83,7 @@ const PropertyList = (props) => {
     fetchProperties();
   }, [headers]);
 
-  // clear all filters
+  clear all filters
   const clearAllFilters = () => {
     setFilterPriceDifference(false);
     setFilterDaysOnMarketDifference(false);
