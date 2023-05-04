@@ -101,4 +101,23 @@ const KeywordFilter = ({ keyword, checked, onChange }) => {
   );
 };
 
-export default KeywordFilter;
+const KeywordsFilterList = ({ keywordFilters, handleKeywordCheckboxChange }) => {
+  return (
+    <div className={styles.keywordFilters}>
+      <h3>Keywords filter</h3>
+      <div className={styles.keywordFilterContainer}>
+        {keywords.map((keyword, index) => (
+          <KeywordFilter
+            key={index}
+            keyword={keyword}
+            checked={keywordFilters[keyword]}
+            onChange={handleKeywordCheckboxChange}
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+
+export { KeywordsFilterList };

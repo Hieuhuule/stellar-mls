@@ -2,14 +2,14 @@ import React, { useState, useEffect, useMemo } from "react";
 import axios from "axios";
 import styles from "./PropertyList.module.css";
 import PriceChangeFilter from "./PriceChangeFilter";
-import KeywordFilter, { keywords } from "./KeywordFilter";
+import { keywords } from "./KeywordFilter";
+import { KeywordsFilterList } from "./KeywordFilter";
 import ExportToCSVButton from "./ExportToCSVButton";
 import AgeFilter from "./AgeFilter";
 import { formatDate } from "../utils";
 import ClearFilters from "./ClearFilters";
 import FilteredProperties from "./FilteredProperties";
 import TableHeader from "./TableHeader";
-import MarketDiscrepancyFilter from "./MarketDiscrepancyFilter";
 
 const API_BASE_URL = "https://api.mlsgrid.com/v2/Property?$top=5000";
 const ACCESS_TOKEN = "7c0cc8a6877006b073dbc4cc978b45ba7c1cd6e2";
@@ -83,9 +83,6 @@ const PropertyList = (props) => {
     "Industrial",
   ];
 
-  // automatically excludes these property statuses from StandardStatus
-  // const excludedStatuses = ["Sold", "Hold", "Pending", "Delete", "Incomplete", "Closed"];
-
   const [keywordFilters, setKeywordFilters] = useState(
     keywords.reduce((acc, keyword) => {
       acc[keyword] = false;
@@ -109,28 +106,26 @@ const PropertyList = (props) => {
           />
 
           {/*Days on Market Discrepancy*/}
-          <MarketDiscrepancyFilter
-            filterDaysOnMarketDifference={filterDaysOnMarketDifference}
-            setFilterDaysOnMarketDifference={setFilterDaysOnMarketDifference}
-          />
+          <label className={styles.filterLabel}>
+            <input
+              className={styles.filterCheckbox}
+              type="checkbox"
+              checked={filterDaysOnMarketDifference}
+              onChange={(event) =>
+                setFilterDaysOnMarketDifference(event.target.checked)
+              }
+            />
+            Days on Market Discrepancy
+          </label>
 
           {/*Age filter*/}
           <AgeFilter ageFilter={ageFilter} setAgeFilter={setAgeFilter} />
 
-          {/*Keywords filter checkboxes*/}
-          <div className={styles.keywordBox}>
-            <h3>Keywords filter</h3>
-            <div className={styles.keywordFilterContainer}>
-              {keywords.map((keyword, index) => (
-                <KeywordFilter
-                  key={index}
-                  keyword={keyword}
-                  checked={keywordFilters[keyword]}
-                  onChange={handleKeywordCheckboxChange}
-                />
-              ))}
-            </div>
-          </div>
+          {/*Keywords filter list*/}
+          <KeywordsFilterList
+            keywordFilters={keywordFilters}
+            handleKeywordCheckboxChange={handleKeywordCheckboxChange}
+          />
 
           {/* Clear all filters button */}
           <ClearFilters
@@ -148,7 +143,6 @@ const PropertyList = (props) => {
               filterDaysOnMarketDifference,
             }}
             excludedSubtypes={excludedSubtypes}
-            // excludedStatuses={excludedStatuses}
             containsSelectedKeywords={containsSelectedKeywords}
             formatDate={formatDate}
           />
@@ -170,7 +164,6 @@ const PropertyList = (props) => {
               filterDaysOnMarketDifference,
             }}
             excludedSubtypes={excludedSubtypes}
-            // excludedStatuses={excludedStatuses}
             containsSelectedKeywords={containsSelectedKeywords}
             formatDate={formatDate}
           />
