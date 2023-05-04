@@ -7,7 +7,6 @@ const FilteredProperties = ({
   filters,
   excludedSubtypes,
   containsSelectedKeywords,
-  formatDate,
 }) => {
   const { keywordFilters, filterPriceDifference, ageFilter, filterDaysOnMarketDifference } = filters;
 
