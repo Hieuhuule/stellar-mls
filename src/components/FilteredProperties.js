@@ -66,9 +66,10 @@ const FilteredProperties = ({
       // Apply days on market discrepancy filter
       return (
         !filterDaysOnMarketDifference ||
-        property.MLSMarketDaysOnMarket !== property.DaysOnMarket
+        property.CumulativeDaysOnMarket !== property.DaysOnMarket
       );
-    });
+    })
+    
 
   return (
     <>

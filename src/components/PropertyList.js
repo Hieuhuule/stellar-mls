@@ -10,6 +10,7 @@ import { formatDate } from "../utils";
 import ClearFilters from "./ClearFilters";
 import FilteredProperties from "./FilteredProperties";
 import TableHeader from "./TableHeader";
+import DaysOnMarketDiscrepancyFilter from "./DaysOnMarketDiscrepancyFilter";
 
 const API_BASE_URL =
   "https://api.mlsgrid.com/v2/Property?$filter=OriginatingSystemName%20eq%20%27mfrmls%27%20and%20MlgCanView%20eq%20true%20and%20StandardStatus%20eq%20%27Active%27%20and%20PropertyType%20eq%20%27Residential%27&$top=5000";
@@ -116,17 +117,11 @@ const PropertyList = (props) => {
           />
 
           {/*Days on Market Discrepancy*/}
-          <label className={styles.filterLabel}>
-            <input
-              className={styles.filterCheckbox}
-              type="checkbox"
-              checked={filterDaysOnMarketDifference}
-              onChange={(event) =>
-                setFilterDaysOnMarketDifference(event.target.checked)
-              }
+            <DaysOnMarketDiscrepancyFilter
+              filterDaysOnMarketDifference={filterDaysOnMarketDifference}
+              setFilterDaysOnMarketDifference={setFilterDaysOnMarketDifference}
             />
-            Days on Market Discrepancy
-          </label>
+
 
           {/*Age filter*/}
           <AgeFilter ageFilter={ageFilter} setAgeFilter={setAgeFilter} />
