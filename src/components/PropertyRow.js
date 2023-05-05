@@ -3,11 +3,23 @@ import React from 'react';
 import { formatCurrency } from "./FormatCurrency";
 import { formatDate } from '../utils';
 import styles from './PropertyRow.module.css';
+
+const getPriceColor = (listPrice, originalListPrice) => {
+  if (listPrice > originalListPrice) {
+    return "red";
+  } else if (listPrice < originalListPrice) {
+    return "green";
+  } else {
+    return "inherit";
+  }
+};
+
+
 const PropertyRow = ({ property }) => {
     return (
       <tr>
         <td className={styles.listingId}>{property["ListingId"].substring(3)}</td>
-        <td className={styles.currentPrice}>{formatCurrency(property["ListPrice"])}</td>
+        <td className={styles.currentPrice} style={{ color: getPriceColor(property.ListPrice, property.OriginalListPrice) }}>{formatCurrency(property["ListPrice"])}</td>
         <td className={styles.previousPrice}>{formatCurrency(property["PreviousListPrice"])}</td>
         <td className={styles.originalPrice}>{formatCurrency(property["OriginalListPrice"])}</td>
         <td className={styles.priceChangeTimestamp}>{formatDate(property["PriceChangeTimestamp"])}</td>
