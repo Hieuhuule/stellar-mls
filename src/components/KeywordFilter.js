@@ -1,5 +1,6 @@
-import React from "react";
-import styles from "./KeywordFilter.module.css";
+import React, { useState } from 'react';
+import styles from './KeywordFilter.module.css';
+
 
 export const keywords = [
   "abandoned property",
@@ -102,19 +103,27 @@ const KeywordFilter = ({ keyword, checked, onChange }) => {
 };
 
 const KeywordsFilterList = ({ keywordFilters, handleKeywordCheckboxChange }) => {
+  const [showKeywords, setShowKeywords] = useState(false);
+
+  const toggleKeywordsVisibility = () => {
+    setShowKeywords(!showKeywords);
+  };
+
   return (
     <div className={styles.keywordFilters}>
-      <h3>Keywords filter</h3>
-      <div className={styles.keywordFilterContainer}>
-        {keywords.map((keyword, index) => (
-          <KeywordFilter
-            key={index}
-            keyword={keyword}
-            checked={keywordFilters[keyword]}
-            onChange={handleKeywordCheckboxChange}
-          />
-        ))}
-      </div>
+      <h3 onClick={toggleKeywordsVisibility}>{showKeywords ? 'Click to Hide Keywords Filter' : 'Click to Show Keywords Filter'}</h3>
+      {showKeywords && (
+        <div className={styles.keywordFilterContainer}>
+          {keywords.map((keyword, index) => (
+            <KeywordFilter
+              key={index}
+              keyword={keyword}
+              checked={keywordFilters[keyword]}
+              onChange={handleKeywordCheckboxChange}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 };
@@ -125,7 +134,5 @@ export const containsSelectedKeywords = (text, keywordFilters) => {
       !keywordFilters[keyword] || text.toLowerCase().includes(keyword.toLowerCase())
   );
 };
-
-
 
 export { KeywordsFilterList };
