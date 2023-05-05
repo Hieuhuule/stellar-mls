@@ -6,6 +6,7 @@ const FilteredProperties = ({
   properties,
   filters,
   excludedSubtypes,
+  excludedCounty,
   containsSelectedKeywords,
   formatDate,
 }) => {
@@ -34,6 +35,10 @@ const FilteredProperties = ({
     .filter((property) => {
       // Apply subtype exclusion
       return !excludedSubtypes.includes(property.PropertyType);
+    })
+    .filter((property) => {
+      // Apply county exclusion
+      return !excludedCounty.includes(property.CountyOrParish);
     })
     .filter((property) => {
       // Apply keyword filters

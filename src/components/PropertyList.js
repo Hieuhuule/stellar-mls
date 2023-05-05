@@ -34,6 +34,8 @@ const PropertyList = (props) => {
   const [filterDaysOnMarketDifference, setFilterDaysOnMarketDifference] =
     useState(false);
 
+  
+
   const headers = useMemo(
     () => ({
       Authorization: `Bearer ${ACCESS_TOKEN}`,
@@ -95,6 +97,8 @@ const PropertyList = (props) => {
     "Retail",
     "Industrial",
   ];
+
+  const excludedCounty = ["Out of Area"];
 
   const [keywordFilters, setKeywordFilters] = useState(
     keywords.reduce((acc, keyword) => {
@@ -159,6 +163,7 @@ const PropertyList = (props) => {
               priceRangeFilter,
             }}
             excludedSubtypes={excludedSubtypes}
+            excludedCounty={excludedCounty}
             containsSelectedKeywords={containsSelectedKeywords}
             formatDate={formatDate}
           />
@@ -181,6 +186,7 @@ const PropertyList = (props) => {
               priceRangeFilter,
             }}
             excludedSubtypes={excludedSubtypes}
+            excludedCounty={excludedCounty}
             containsSelectedKeywords={(text) =>
               containsSelectedKeywords(text, keywordFilters)
             }
