@@ -1,6 +1,6 @@
 // FilteredProperties.js
-import React from 'react';
-import PropertyRow from './PropertyRow';
+import React from "react";
+import PropertyRow from "./PropertyRow";
 
 const FilteredProperties = ({
   properties,
@@ -11,10 +11,9 @@ const FilteredProperties = ({
 }) => {
   const {
     keywordFilters,
-    filterPriceDifference,
+    priceChangeFilter,
     ageFilter,
     filterDaysOnMarketDifference,
-    filterOnePriceChange,
   } = filters;
 
   const isAgeFilterMatch = (property, ageFilter) => {
@@ -43,20 +42,21 @@ const FilteredProperties = ({
       );
     })
     .filter((property) => {
-      // Apply price difference filter
-      return (
-        !filterPriceDifference ||
-        (property.ListPrice !== property.PreviousListPrice &&
-          property.PreviousListPrice !== property.OriginalListPrice)
-      );
-    })
-    .filter((property) => {
-      // Apply one price change filter
-      return (
-        !filterOnePriceChange ||
-        (property.ListPrice !== property.PreviousListPrice &&
-          property.PreviousListPrice === property.OriginalListPrice)
-      );
+      // Apply price change filter
+      if (priceChangeFilter === "one") {
+        return (
+          property.ListPrice !== property.PreviousListPrice &&
+          property.PreviousListPrice === property.OriginalListPrice
+        );
+      } else if (priceChangeFilter === "twoOrMore") {
+        return (
+          property.ListPrice !== property.PreviousListPrice &&
+          property.PreviousListPrice !== property.OriginalListPrice &&
+          property.ListPrice !== property.OriginalListPrice
+        );
+      } else {
+        return true;
+      }
     })
     .filter((property) => {
       // Apply age filter

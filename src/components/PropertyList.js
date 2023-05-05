@@ -10,7 +10,6 @@ import { formatDate } from "../utils";
 import ClearFilters from "./ClearFilters";
 import FilteredProperties from "./FilteredProperties";
 import TableHeader from "./TableHeader";
-import OnePriceChangeFilter from "./OnePriceChangeFilter";
 
 const API_BASE_URL =
   "https://api.mlsgrid.com/v2/Property?$filter=OriginatingSystemName%20eq%20%27mfrmls%27%20and%20MlgCanView%20eq%20true%20and%20StandardStatus%20eq%20%27Active%27%20and%20PropertyType%20eq%20%27Residential%27&$top=5000";
@@ -18,7 +17,7 @@ const ACCESS_TOKEN = "7c0cc8a6877006b073dbc4cc978b45ba7c1cd6e2";
 
 const PropertyList = (props) => {
   const [properties, setProperties] = useState([]);
-  const [filterOnePriceChange, setFilterOnePriceChange] = useState(false);
+  const [priceChangeFilter, setPriceChangeFilter] = useState("none");
 
   // state variable to manage the price filter checkbox state
   const handleKeywordCheckboxChange = (event) => {
@@ -29,7 +28,6 @@ const PropertyList = (props) => {
     }));
   };
 
-  const [filterPriceDifference, setFilterPriceDifference] = useState(false);
   const [ageFilter, setAgeFilter] = useState("");
   const [filterDaysOnMarketDifference, setFilterDaysOnMarketDifference] =
     useState(false);
@@ -86,19 +84,6 @@ const PropertyList = (props) => {
     fetchProperties();
   }, [headers]);
 
-  // clear all filters
-  const clearAllFilters = () => {
-    setFilterPriceDifference(false);
-    setFilterDaysOnMarketDifference(false);
-    setAgeFilter("");
-    setKeywordFilters(
-      keywords.reduce((acc, keyword) => {
-        acc[keyword] = false;
-        return acc;
-      }, {})
-    );
-  };
-
   // automatically excludes these property types
   const excludedSubtypes = [
     "Condominium",
@@ -124,18 +109,10 @@ const PropertyList = (props) => {
           <h2>Filters</h2>
           <p>Filter the properties based on the following criteria:</p>
 
-          {/*2+ Price Change*/}
+          {/* Price Change Filter */}
           <PriceChangeFilter
-            label="2+ Price Change"
-            filterPriceDifference={filterPriceDifference}
-            setFilterPriceDifference={setFilterPriceDifference}
-          />
-
-          {/*1 Price Change*/}
-          <OnePriceChangeFilter
-            label="1 Price Change"
-            filterOnePriceChange={filterOnePriceChange}
-            setFilterOnePriceChange={setFilterOnePriceChange}
+            priceChangeFilter={priceChangeFilter}
+            setPriceChangeFilter={setPriceChangeFilter}
           />
 
           {/*Days on Market Discrepancy*/}
@@ -162,8 +139,10 @@ const PropertyList = (props) => {
 
           {/* Clear all filters button */}
           <ClearFilters
-            className="clearAllFiltersButton"
-            clearAllFilters={clearAllFilters}
+            setAgeFilter={setAgeFilter}
+            setKeywordFilters={setKeywordFilters}
+            setFilterDaysOnMarketDifference={setFilterDaysOnMarketDifference}
+            setPriceChangeFilter={setPriceChangeFilter}
           />
 
           {/* Export to CSV button */}
@@ -171,7 +150,7 @@ const PropertyList = (props) => {
             properties={properties}
             filters={{
               keywordFilters,
-              filterPriceDifference,
+              priceChangeFilter,
               ageFilter,
               filterDaysOnMarketDifference,
             }}
@@ -192,10 +171,9 @@ const PropertyList = (props) => {
             properties={properties}
             filters={{
               keywordFilters,
-              filterPriceDifference,
+              priceChangeFilter,
               ageFilter,
               filterDaysOnMarketDifference,
-              filterOnePriceChange, // Add this line
             }}
             excludedSubtypes={excludedSubtypes}
             containsSelectedKeywords={(text) =>
