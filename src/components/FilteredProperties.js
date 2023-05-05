@@ -8,12 +8,10 @@ const FilteredProperties = ({
   excludedSubtypes,
   containsSelectedKeywords,
   formatDate,
-  cityFilter,
-  countyFilter,
 }) => {
   const {
     keywordFilters,
-    filterPriceDifference,
+    priceChangeFilter,
     ageFilter,
     filterDaysOnMarketDifference,
   } = filters;
@@ -33,17 +31,6 @@ const FilteredProperties = ({
 
   const filteredProperties = properties
     .filter((property) => {
-      // Apply city filter
-      return !cityFilter || property.City === cityFilter;
-    })
-    .filter((property) => {
-      // Apply county filter
-      return (
-        !countyFilter.length ||
-        countyFilter.some((county) => property.CountyOrParish === county)
-      );
-    })
-    .filter((property) => {
       // Apply subtype exclusion
       return !excludedSubtypes.includes(property.PropertyType);
     })
@@ -55,11 +42,21 @@ const FilteredProperties = ({
       );
     })
     .filter((property) => {
-      // Apply price difference filter
-      return (
-        !filterPriceDifference ||
-        (property.PriceChange && property.PriceChange.length >= 2)
-      );
+      // Apply price change filter
+      if (priceChangeFilter === "one") {
+        return (
+          property.ListPrice !== property.PreviousListPrice &&
+          property.PreviousListPrice === property.OriginalListPrice
+        );
+      } else if (priceChangeFilter === "twoOrMore") {
+        return (
+          property.ListPrice !== property.PreviousListPrice &&
+          property.PreviousListPrice !== property.OriginalListPrice &&
+          property.ListPrice !== property.OriginalListPrice
+        );
+      } else {
+        return true;
+      }
     })
     .filter((property) => {
       // Apply age filter

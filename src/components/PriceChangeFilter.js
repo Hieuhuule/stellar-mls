@@ -1,28 +1,52 @@
-import React from "react";
-import styles from "./PriceChangeFilter.module.css";
+import React from 'react';
+import styles from './PropertyList.module.css';
 
 const PriceChangeFilter = ({
-  label,
-  filterPriceDifference,
-  setFilterPriceDifference,
-  type = "checkbox",
+  priceChangeFilter,
+  setPriceChangeFilter,
 }) => {
-  const handleChange = (event) => {
-    setFilterPriceDifference(event.target.checked);
+  const handlePriceChangeFilter = (event) => {
+    setPriceChangeFilter(event.target.value);
   };
 
   return (
-    <label className={styles.filterLabel}>
-      <input
-        className={type === "checkbox" ? styles.filterCheckbox : styles.filterRadio}
-        type={type}
-        checked={filterPriceDifference}
-        onChange={handleChange}
-      />
-      {label}
-    </label>
+    <>
+      <h3>Price Change Filter</h3>
+      <label className={styles.filterLabel}>
+        <input
+          className={styles.filterRadio}
+          type="radio"
+          name="priceChangeFilter"
+          value="one"
+          checked={priceChangeFilter === 'one'}
+          onChange={handlePriceChangeFilter}
+        />
+        1 Price Change
+      </label>
+      <label className={styles.filterLabel}>
+        <input
+          className={styles.filterRadio}
+          type="radio"
+          name="priceChangeFilter"
+          value="twoOrMore"
+          checked={priceChangeFilter === 'twoOrMore'}
+          onChange={handlePriceChangeFilter}
+        />
+        2+ Price Changes
+      </label>
+      <label className={styles.filterLabel}>
+        <input
+          className={styles.filterRadio}
+          type="radio"
+          name="priceChangeFilter"
+          value="none"
+          checked={priceChangeFilter === 'none'}
+          onChange={handlePriceChangeFilter}
+        />
+        No Filter
+      </label>
+    </>
   );
 };
-
 
 export default PriceChangeFilter;
