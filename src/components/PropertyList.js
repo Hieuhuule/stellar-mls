@@ -10,12 +10,15 @@ import { formatDate } from "../utils";
 import ClearFilters from "./ClearFilters";
 import FilteredProperties from "./FilteredProperties";
 import TableHeader from "./TableHeader";
+import OnePriceChangeFilter from "./OnePriceChangeFilter";
 
-const API_BASE_URL = "https://api.mlsgrid.com/v2/Property?$filter=OriginatingSystemName%20eq%20%27mfrmls%27%20and%20MlgCanView%20eq%20true%20and%20StandardStatus%20eq%20%27Active%27%20and%20PropertyType%20eq%20%27Residential%27&$top=5000";
+const API_BASE_URL =
+  "https://api.mlsgrid.com/v2/Property?$filter=OriginatingSystemName%20eq%20%27mfrmls%27%20and%20MlgCanView%20eq%20true%20and%20StandardStatus%20eq%20%27Active%27%20and%20PropertyType%20eq%20%27Residential%27&$top=5000";
 const ACCESS_TOKEN = "7c0cc8a6877006b073dbc4cc978b45ba7c1cd6e2";
 
 const PropertyList = (props) => {
   const [properties, setProperties] = useState([]);
+  const [filterOnePriceChange, setFilterOnePriceChange] = useState(false);
 
   // state variable to manage the price filter checkbox state
   const handleKeywordCheckboxChange = (event) => {
@@ -37,7 +40,7 @@ const PropertyList = (props) => {
     }),
     []
   );
-  
+
   // PAGINATION - USE WHEN READY TO DEPLOY
   // useEffect(() => {
   //   const fetchPaginatedProperties = async (url, allProperties = []) => {
@@ -45,10 +48,10 @@ const PropertyList = (props) => {
   //       const response = await axios.get(url, { headers });
   //       console.log("Fetched data from URL:", url); // Log the URL being fetched
   //       console.log("Fetched data:", response.data); // Log the fetched data
-        
+
   //       const newProperties = allProperties.concat(response.data.value);
   //       console.log("New properties:", newProperties); // Log the updated properties array
-  
+
   //       if (response.data["@odata.nextLink"]) {
   //         return await fetchPaginatedProperties(response.data["@odata.nextLink"], newProperties);
   //       } else {
@@ -59,16 +62,16 @@ const PropertyList = (props) => {
   //       return allProperties;
   //     }
   //   };
-  
+
   //   const fetchProperties = async () => {
   //     const allProperties = await fetchPaginatedProperties(API_BASE_URL);
   //     console.log("All properties:", allProperties); // Log the final accumulated properties array
   //     setProperties(allProperties);
   //   };
-  
+
   //   fetchProperties();
   // }, [headers]);
-  
+
   // NO PAGINATION - USE WHEN TESTING
   useEffect(() => {
     const fetchProperties = async () => {
@@ -128,6 +131,13 @@ const PropertyList = (props) => {
             setFilterPriceDifference={setFilterPriceDifference}
           />
 
+          {/*1 Price Change*/}
+          <OnePriceChangeFilter
+            label="1 Price Change"
+            filterOnePriceChange={filterOnePriceChange}
+            setFilterOnePriceChange={setFilterOnePriceChange}
+          />
+
           {/*Days on Market Discrepancy*/}
           <label className={styles.filterLabel}>
             <input
@@ -185,6 +195,7 @@ const PropertyList = (props) => {
               filterPriceDifference,
               ageFilter,
               filterDaysOnMarketDifference,
+              filterOnePriceChange, // Add this line
             }}
             excludedSubtypes={excludedSubtypes}
             containsSelectedKeywords={(text) =>

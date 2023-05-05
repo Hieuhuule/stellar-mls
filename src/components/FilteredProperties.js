@@ -9,7 +9,13 @@ const FilteredProperties = ({
   containsSelectedKeywords,
   formatDate,
 }) => {
-  const { keywordFilters, filterPriceDifference, ageFilter, filterDaysOnMarketDifference } = filters;
+  const {
+    keywordFilters,
+    filterPriceDifference,
+    ageFilter,
+    filterDaysOnMarketDifference,
+    filterOnePriceChange,
+  } = filters;
 
   const isAgeFilterMatch = (property, ageFilter) => {
     const daysOnMarket = property.DaysOnMarket;
@@ -40,7 +46,16 @@ const FilteredProperties = ({
       // Apply price difference filter
       return (
         !filterPriceDifference ||
-        (property.PriceChange && property.PriceChange.length >= 2)
+        (property.ListPrice !== property.PreviousListPrice &&
+          property.PreviousListPrice !== property.OriginalListPrice)
+      );
+    })
+    .filter((property) => {
+      // Apply one price change filter
+      return (
+        !filterOnePriceChange ||
+        (property.ListPrice !== property.PreviousListPrice &&
+          property.PreviousListPrice === property.OriginalListPrice)
       );
     })
     .filter((property) => {

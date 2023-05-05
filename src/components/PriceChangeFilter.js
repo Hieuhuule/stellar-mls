@@ -1,28 +1,18 @@
-import React from "react";
-import styles from "./PriceChangeFilter.module.css";
+import React from 'react';
+import styles from './PropertyList.module.css';
 
-const PriceChangeFilter = ({
-  label,
-  filterPriceDifference,
-  setFilterPriceDifference,
-  type = "checkbox",
-}) => {
-  const handleChange = (event) => {
-    setFilterPriceDifference(event.target.checked);
-  };
-
+const PriceChangeFilter = ({ filterPriceDifference, setFilterPriceDifference }) => {
   return (
     <label className={styles.filterLabel}>
       <input
-        className={type === "checkbox" ? styles.filterCheckbox : styles.filterRadio}
-        type={type}
+        className={styles.filterCheckbox}
+        type="checkbox"
         checked={filterPriceDifference}
-        onChange={handleChange}
+        onChange={(event) => setFilterPriceDifference(event.target.checked)}
       />
-      {label}
+      2+ Price Change
     </label>
   );
 };
-
 
 export default PriceChangeFilter;
