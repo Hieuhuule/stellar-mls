@@ -1,0 +1,10 @@
+.cityFilterContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .cityCheckbox {
+    flex: 1 1 calc(16.6667% - 10px);
+  }
+  

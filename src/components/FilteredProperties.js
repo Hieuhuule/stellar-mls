@@ -16,6 +16,7 @@ const FilteredProperties = ({
     ageFilter,
     filterDaysOnMarketDifference,
     priceRangeFilter,
+    cityFilters,
   } = filters;
 
   const isAgeFilterMatch = (property, ageFilter) => {
@@ -40,6 +41,14 @@ const FilteredProperties = ({
       // Apply county exclusion
       return !excludedCounty.includes(property.CountyOrParish);
     })
+    // Apply city filter
+    .filter((property) => {
+      return (
+        !Object.values(cityFilters).some((checked) => checked) ||
+        cityFilters[property.City]
+      );
+    })
+
     .filter((property) => {
       // Apply keyword filters
       return (
