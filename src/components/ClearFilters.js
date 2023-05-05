@@ -19,6 +19,7 @@ const ClearFilters = ({
     });
     setPriceChangeFilter("none");
     setPriceRangeFilter("all");
+    setFilterDaysOnMarketDifference(false);
   };
 
   return (
