@@ -12,9 +12,10 @@ import FilteredProperties from "./FilteredProperties";
 import TableHeader from "./TableHeader";
 import DaysOnMarketDiscrepancyFilter from "./DaysOnMarketDiscrepancyFilter";
 import PriceRangeFilter from "./PriceRangeFilter";
+import CityFilterList from "./CityFilter";
 
 const API_BASE_URL =
-  "https://api.mlsgrid.com/v2/Property?$filter=OriginatingSystemName%20eq%20%27mfrmls%27%20and%20MlgCanView%20eq%20true%20and%20StandardStatus%20eq%20%27Active%27%20and%20PropertyType%20eq%20%27Residential%27&$top=5000";
+  "https://api.mlsgrid.com/v2/Property?$filter=OriginatingSystemName%20eq%20%27mfrmls%27%20and%20MlgCanView%20eq%20true%20and%20StandardStatus%20eq%20%27Active%27%20and%20PropertyType%20eq%20%27Residential%27&$top=3000";
 const ACCESS_TOKEN = "7c0cc8a6877006b073dbc4cc978b45ba7c1cd6e2";
 
 const PropertyList = (props) => {
@@ -25,6 +26,7 @@ const PropertyList = (props) => {
   const [filterDaysOnMarketDifference, setFilterDaysOnMarketDifference] =
     useState(false);
   const [loading, setLoading] = useState(true);
+  const [cityFilters, setCityFilters] = useState({});
 
   const handleKeywordCheckboxChange = (event) => {
     const { name, checked } = event.target;
@@ -117,12 +119,21 @@ const PropertyList = (props) => {
         </div>
       )}
 
-
       {/* checkbox input element */}
       <div className={styles.filterContainer}>
         <div className={styles.box}>
           <h2>Filters</h2>
           <p>Filter the properties based on the following criteria:</p>
+
+          {/* City filter list */}
+          {!loading && (
+            <CityFilterList
+              properties={properties}
+              cityFilters={cityFilters}
+              setCityFilters={setCityFilters}
+              excludedCounty={excludedCounty}
+            />
+          )}
 
           {/*Price Range Filter*/}
           <PriceRangeFilter
@@ -158,6 +169,7 @@ const PropertyList = (props) => {
             setFilterDaysOnMarketDifference={setFilterDaysOnMarketDifference}
             setPriceChangeFilter={setPriceChangeFilter}
             setPriceRangeFilter={setPriceRangeFilter}
+            setCityFilters={setCityFilters} // pass the setCityFilters function as a prop
           />
 
           {/* Export to CSV button */}
@@ -192,6 +204,7 @@ const PropertyList = (props) => {
               ageFilter,
               filterDaysOnMarketDifference,
               priceRangeFilter,
+              cityFilters,
             }}
             excludedSubtypes={excludedSubtypes}
             excludedCounty={excludedCounty}

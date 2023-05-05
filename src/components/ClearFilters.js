@@ -7,6 +7,7 @@ const ClearFilters = ({
   setFilterDaysOnMarketDifference,
   setPriceChangeFilter,
   setPriceRangeFilter,
+  setCityFilters,
 }) => {
   const clearAllFilters = () => {
     setAgeFilter('');
@@ -20,6 +21,7 @@ const ClearFilters = ({
     setPriceChangeFilter("none");
     setPriceRangeFilter("all");
     setFilterDaysOnMarketDifference(false);
+    setCityFilters({});
   };
 
   return (
