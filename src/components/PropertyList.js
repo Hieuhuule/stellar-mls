@@ -21,7 +21,11 @@ const PropertyList = (props) => {
   const [properties, setProperties] = useState([]);
   const [priceChangeFilter, setPriceChangeFilter] = useState("none");
   const [priceRangeFilter, setPriceRangeFilter] = useState("none");
-  // state variable to manage the price filter checkbox state
+  const [ageFilter, setAgeFilter] = useState("");
+  const [filterDaysOnMarketDifference, setFilterDaysOnMarketDifference] =
+    useState(false);
+  const [loading, setLoading] = useState(true);
+
   const handleKeywordCheckboxChange = (event) => {
     const { name, checked } = event.target;
     setKeywordFilters((prevState) => ({
@@ -29,12 +33,6 @@ const PropertyList = (props) => {
       [name]: checked,
     }));
   };
-
-  const [ageFilter, setAgeFilter] = useState("");
-  const [filterDaysOnMarketDifference, setFilterDaysOnMarketDifference] =
-    useState(false);
-
-  
 
   const headers = useMemo(
     () => ({
@@ -78,10 +76,13 @@ const PropertyList = (props) => {
   useEffect(() => {
     const fetchProperties = async () => {
       try {
+        setLoading(true);
         const response = await axios.get(API_BASE_URL, { headers });
         setProperties(response.data.value);
       } catch (error) {
         console.error("Error fetching properties:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -109,6 +110,14 @@ const PropertyList = (props) => {
 
   return (
     <>
+      {/* Loading spinner */}
+      {loading && (
+        <div className={styles.spinnerContainer}>
+          <div className={styles.spinner}></div>
+        </div>
+      )}
+
+
       {/* checkbox input element */}
       <div className={styles.filterContainer}>
         <div className={styles.box}>
@@ -128,11 +137,10 @@ const PropertyList = (props) => {
           />
 
           {/*Days on Market Discrepancy*/}
-            <DaysOnMarketDiscrepancyFilter
-              filterDaysOnMarketDifference={filterDaysOnMarketDifference}
-              setFilterDaysOnMarketDifference={setFilterDaysOnMarketDifference}
-            />
-
+          <DaysOnMarketDiscrepancyFilter
+            filterDaysOnMarketDifference={filterDaysOnMarketDifference}
+            setFilterDaysOnMarketDifference={setFilterDaysOnMarketDifference}
+          />
 
           {/*Age filter*/}
           <AgeFilter ageFilter={ageFilter} setAgeFilter={setAgeFilter} />
