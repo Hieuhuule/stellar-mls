@@ -14,6 +14,7 @@ const FilteredProperties = ({
     priceChangeFilter,
     ageFilter,
     filterDaysOnMarketDifference,
+    priceRangeFilter,
   } = filters;
 
   const isAgeFilterMatch = (property, ageFilter) => {
@@ -66,8 +67,42 @@ const FilteredProperties = ({
       // Apply days on market discrepancy filter
       return (
         !filterDaysOnMarketDifference ||
-        property.MLSMarketDaysOnMarket !== property.DaysOnMarket
+        property.CumulativeDaysOnMarket !== property.DaysOnMarket
       );
+    })
+    .filter((property) => {
+      // Apply price range filter
+      switch (priceRangeFilter) {
+        case "50000-100000":
+          return (
+            property.OriginalListPrice >= 50000 &&
+            property.OriginalListPrice <= 100000
+          );
+        case "100000-200000":
+          return (
+            property.OriginalListPrice >= 100000 &&
+            property.OriginalListPrice <= 200000
+          );
+        case "200000-300000":
+          return (
+            property.OriginalListPrice >= 200000 &&
+            property.OriginalListPrice <= 300000
+          );
+        case "300000-400000":
+          return (
+            property.OriginalListPrice >= 300000 &&
+            property.OriginalListPrice <= 400000
+          );
+        case "400000-500000":
+          return (
+            property.OriginalListPrice >= 400000 &&
+            property.OriginalListPrice <= 500000
+          );
+        case "500000+":
+          return property.OriginalListPrice > 500000;
+        default:
+          return true;
+      }
     });
 
   return (

@@ -6,6 +6,7 @@ const ClearFilters = ({
   setKeywordFilters,
   setFilterDaysOnMarketDifference,
   setPriceChangeFilter,
+  setPriceRangeFilter,
 }) => {
   const clearAllFilters = () => {
     setAgeFilter('');
@@ -17,6 +18,7 @@ const ClearFilters = ({
       return newKeywordFilters;
     });
     setPriceChangeFilter("none");
+    setPriceRangeFilter("all");
   };
 
   return (
