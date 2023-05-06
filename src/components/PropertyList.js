@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styles from "./PropertyList.module.css";
 import PriceChangeFilter from "./PriceChangeFilter";
@@ -14,9 +14,7 @@ import DaysOnMarketDiscrepancyFilter from "./DaysOnMarketDiscrepancyFilter";
 import PriceRangeFilter from "./PriceRangeFilter";
 import CityFilterList from "./CityFilter";
 
-const API_BASE_URL =
-  "https://api.mlsgrid.com/v2/Property?$filter=OriginatingSystemName%20eq%20%27mfrmls%27%20and%20MlgCanView%20eq%20true%20and%20StandardStatus%20eq%20%27Active%27%20and%20PropertyType%20eq%20%27Residential%27&$top=3000";
-const ACCESS_TOKEN = "7c0cc8a6877006b073dbc4cc978b45ba7c1cd6e2";
+const API_BASE_URL = "http://localhost:5000/properties";
 
 const PropertyList = (props) => {
   const [properties, setProperties] = useState([]);
@@ -36,51 +34,13 @@ const PropertyList = (props) => {
     }));
   };
 
-  const headers = useMemo(
-    () => ({
-      Authorization: `Bearer ${ACCESS_TOKEN}`,
-    }),
-    []
-  );
-
-  // PAGINATION - USE WHEN READY TO DEPLOY
-  // useEffect(() => {
-  //   const fetchPaginatedProperties = async (url, allProperties = []) => {
-  //     try {
-  //       const response = await axios.get(url, { headers });
-  //       console.log("Fetched data from URL:", url); // Log the URL being fetched
-  //       console.log("Fetched data:", response.data); // Log the fetched data
-
-  //       const newProperties = allProperties.concat(response.data.value);
-  //       console.log("New properties:", newProperties); // Log the updated properties array
-
-  //       if (response.data["@odata.nextLink"]) {
-  //         return await fetchPaginatedProperties(response.data["@odata.nextLink"], newProperties);
-  //       } else {
-  //         return newProperties;
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching properties:", error);
-  //       return allProperties;
-  //     }
-  //   };
-
-  //   const fetchProperties = async () => {
-  //     const allProperties = await fetchPaginatedProperties(API_BASE_URL);
-  //     console.log("All properties:", allProperties); // Log the final accumulated properties array
-  //     setProperties(allProperties);
-  //   };
-
-  //   fetchProperties();
-  // }, [headers]);
-
-  // NO PAGINATION - USE WHEN TESTING
   useEffect(() => {
     const fetchProperties = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(API_BASE_URL, { headers });
-        setProperties(response.data.value);
+        const response = await axios.get(API_BASE_URL);
+        setProperties(JSON.parse(response.data[0].value));
+        console.log("Fetched properties:", properties);
       } catch (error) {
         console.error("Error fetching properties:", error);
       } finally {
@@ -89,7 +49,8 @@ const PropertyList = (props) => {
     };
 
     fetchProperties();
-  }, [headers]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // automatically excludes these property types
   const excludedSubtypes = [
