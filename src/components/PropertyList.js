@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import axios from "axios";
 import styles from "./PropertyList.module.css";
 import PriceChangeFilter from "./PriceChangeFilter";
@@ -18,6 +18,8 @@ const API_BASE_URL = "http://localhost:5000/properties";
 
 const PropertyList = (props) => {
   const [properties, setProperties] = useState([]);
+  const [page, setPage] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
   const [priceChangeFilter, setPriceChangeFilter] = useState("none");
   const [priceRangeFilter, setPriceRangeFilter] = useState("none");
   const [ageFilter, setAgeFilter] = useState("");
@@ -34,24 +36,41 @@ const PropertyList = (props) => {
     }));
   };
 
+  const observer = useRef();
+  const lastPropertyElementRef = useCallback(
+    (node) => {
+      if (loading) return;
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          setPage((prevPage) => prevPage + 1);
+        }
+      });
+      if (node) observer.current.observe(node);
+    },
+    [loading, hasMore]
+  );
+
   useEffect(() => {
     const fetchProperties = async () => {
+      setLoading(true);
       try {
-        setLoading(true);
-        const response = await axios.get(API_BASE_URL);
-        setProperties(response.data);
-        console.log("Fetched properties:", properties);
+        const response = await axios.get(
+          `${API_BASE_URL}?limit=2000&offset=${page * 2000}`
+        );
+        setProperties((prevProperties) => [
+          ...prevProperties,
+          ...response.data,
+        ]);
+        setHasMore(response.data.length > 0);
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching properties:", error);
-      } finally {
-        setLoading(false);
       }
     };
-  
-    fetchProperties();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
+    fetchProperties();
+  }, [page]);
 
   // automatically excludes these property types
   const excludedSubtypes = [
@@ -175,6 +194,9 @@ const PropertyList = (props) => {
             }
             formatDate={formatDate}
           />
+          <tr ref={lastPropertyElementRef}>
+            <td colSpan="100%">{loading ? "Loading..." : "End of results"}</td>
+          </tr>
         </tbody>
       </table>
     </>

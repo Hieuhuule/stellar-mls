@@ -21,7 +21,7 @@ app.get('/properties', async (req, res) => {
   let limit = parseInt(req.query.limit);
   let offset = parseInt(req.query.offset);
   
-  if (isNaN(limit)) limit = 1000;
+  if (isNaN(limit)) limit = 5000;
   if (isNaN(offset)) offset = 0;
   
   try {
