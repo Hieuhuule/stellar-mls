@@ -1,34 +1,46 @@
 const express = require('express');
-const mysql = require('mysql');
+const mysql = require('mysql2/promise');
 const cors = require('cors');
 
 const app = express();
+const port = 5000;
+
 app.use(cors());
 
-const db = mysql.createConnection({
-    host: '127.0.0.1',
-    user: 'root',
-    port: '3306', 
-    password: 'password',
-    database: 'stellardb',
+const dbConfig = {
+  host: 'localhost',
+  user: 'root',
+  password: 'password',
+  database: 'stellardb',
+};
+
+// Create a connection pool
+const pool = mysql.createPool(dbConfig);
+
+app.get('/properties', async (req, res) => {
+  let limit = parseInt(req.query.limit);
+  let offset = parseInt(req.query.offset);
+  
+  if (isNaN(limit)) limit = 1000;
+  if (isNaN(offset)) offset = 0;
+  
+  try {
+    const query = `
+      SELECT *
+      FROM properties AS p
+      JOIN properties_group_1 AS g1 ON p.id = g1.main_id
+      JOIN properties_group_2 AS g2 ON p.id = g2.main_id
+      LIMIT ? OFFSET ?
+    `;
+    const [rows] = await pool.query(query, [limit, offset]);
+    res.json(rows);
+  } catch (error) {
+    console.error("Error fetching properties:", error);
+    res.status(500).json({ error: error.message });
+  }
 });
 
-db.connect((err) => {
-  if (err) throw err;
-  console.log('Connected to the MySQL database.');
+
+app.listen(port, () => {
+  console.log(`Server started on port ${port}`);
 });
-
-app.get('/properties', (req, res) => {
-    const query = 'SELECT * FROM properties';
-    db.query(query, (err, results) => {
-      if (err) {
-        console.error('Error executing query:', err);
-        res.status(500).json({ error: 'Error executing query' });
-        return;
-      }
-      res.json(results);
-    });
-  });
-
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server started on port ${PORT}`));

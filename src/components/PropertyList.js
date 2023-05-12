@@ -39,7 +39,7 @@ const PropertyList = (props) => {
       try {
         setLoading(true);
         const response = await axios.get(API_BASE_URL);
-        setProperties(JSON.parse(response.data[0].value));
+        setProperties(response.data);
         console.log("Fetched properties:", properties);
       } catch (error) {
         console.error("Error fetching properties:", error);
@@ -47,10 +47,11 @@ const PropertyList = (props) => {
         setLoading(false);
       }
     };
-
+  
     fetchProperties();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
 
   // automatically excludes these property types
   const excludedSubtypes = [
