@@ -1,4 +1,6 @@
 Here's the steps to run the Stellar MLS database, all the commands will be in bash terminal.
+* Be sure to run npm install before running any of the following commands.
+* You may need to run 'npm install json2csv'
 
 1. Download the latest information from the Stellar MLS API into a CSV file by using the following command:
    node downloadAPI.js
