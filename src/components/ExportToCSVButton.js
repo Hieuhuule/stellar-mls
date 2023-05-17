@@ -5,15 +5,19 @@ import { formatCurrency } from "./FormatCurrency";
 const ExportToCSVButton = ({
   properties,
   filters,
-  excludedSubtypes,
+  excludedSubtypes = [],
   containsSelectedKeywords,
   formatDate,
 }) => {
   const {
     keywordFilters,
     filterPriceDifference,
-    ageFilter,
+    ageFilter = "",
     filterDaysOnMarketDifference,
+    cityFilters,
+    priceRangeFilter,
+    excludedCounty = [],
+    priceChangeFilter,
   } = filters;
 
   const escapeCsvField = (field) => {
@@ -32,23 +36,48 @@ const ExportToCSVButton = ({
           (property["ListPrice"] !== property["PreviousListPrice"] &&
             property["ListPrice"] !== property["OriginalListPrice"] &&
             property["PreviousListPrice"] !== property["OriginalListPrice"])) &&
-        (
-          ageFilter === "" ||
-          (ageFilter.includes("-")
+        (ageFilter === "" ||
+          (ageFilter && ageFilter.includes("-")
             ? ageFilter === "60-90"
-              ? property["DaysOnMarket"] >= 60 &&
-                property["DaysOnMarket"] <= 90
+              ? property["DaysOnMarket"] >= 60 && property["DaysOnMarket"] <= 90
               : ageFilter === "90-180"
               ? property["DaysOnMarket"] >= 90 &&
                 property["DaysOnMarket"] <= 180
               : property["DaysOnMarket"] >= 180 &&
                 property["DaysOnMarket"] <= 365
-            : property["DaysOnMarket"] >= parseInt(ageFilter))
-        ) && (
-          !filterDaysOnMarketDifference ||
-            property["CumulativeDaysOnMarket"] !== property["DaysOnMarket"]
-        ) &&
-        !excludedSubtypes.includes(property["PropertySubType"])
+            : property["DaysOnMarket"] >= parseInt(ageFilter))) &&
+        (!filterDaysOnMarketDifference ||
+          property["CumulativeDaysOnMarket"] !== property["DaysOnMarket"]) &&
+        !excludedSubtypes.includes(property["PropertySubType"]) &&
+        !excludedCounty.includes(property["CountyOrParish"]) &&
+        (!Object.values(cityFilters).some((checked) => checked) ||
+          cityFilters[property["City"]]) &&
+        (priceChangeFilter === "one"
+          ? property["ListPrice"] !== property["PreviousListPrice"] &&
+            property["PreviousListPrice"] === property["OriginalListPrice"]
+          : priceChangeFilter === "twoOrMore"
+          ? property["ListPrice"] !== property["PreviousListPrice"] &&
+            property["PreviousListPrice"] !== property["OriginalListPrice"] &&
+            property["ListPrice"] !== property["OriginalListPrice"]
+          : true) &&
+        (priceRangeFilter === "50000-100000"
+          ? property["OriginalListPrice"] >= 50000 &&
+            property["OriginalListPrice"] <= 100000
+          : priceRangeFilter === "100000-200000"
+          ? property["OriginalListPrice"] >= 100000 &&
+            property["OriginalListPrice"] <= 200000
+          : priceRangeFilter === "200000-300000"
+          ? property["OriginalListPrice"] >= 200000 &&
+            property["OriginalListPrice"] <= 300000
+          : priceRangeFilter === "300000-400000"
+          ? property["OriginalListPrice"] >= 300000 &&
+            property["OriginalListPrice"] <= 400000
+          : priceRangeFilter === "400000-500000"
+          ? property["OriginalListPrice"] >= 400000 &&
+            property["OriginalListPrice"] <= 500000
+          : priceRangeFilter === "500000+"
+          ? property["OriginalListPrice"] > 500000
+          : true)
     );
 
     const headers = [
@@ -119,23 +148,67 @@ const ExportToCSVButton = ({
       property["PropertyType"],
       property["PropertySubType"],
       escapeCsvField(property["MFR_PropertyDescription"]),
-      escapeCsvField(Array.isArray(property["ConstructionMaterials"]) ? property["ConstructionMaterials"].join(";") : ""),
-      escapeCsvField(Array.isArray(property["CommunityFeatures"]) ? property["CommunityFeatures"].join(";") : ""),
-      escapeCsvField(Array.isArray(property["PoolFeatures"]) ? property["PoolFeatures"].join(";") : ""),
+      escapeCsvField(
+        Array.isArray(property["ConstructionMaterials"])
+          ? property["ConstructionMaterials"].join(";")
+          : ""
+      ),
+      escapeCsvField(
+        Array.isArray(property["CommunityFeatures"])
+          ? property["CommunityFeatures"].join(";")
+          : ""
+      ),
+      escapeCsvField(
+        Array.isArray(property["PoolFeatures"])
+          ? property["PoolFeatures"].join(";")
+          : ""
+      ),
       property["PoolPrivateYN"],
-      escapeCsvField(Array.isArray(property["Cooling"]) ? property["Cooling"].join(";") : ""),
-      escapeCsvField(Array.isArray(property["Heating"]) ? property["Heating"].join(";") : ""),
+      escapeCsvField(
+        Array.isArray(property["Cooling"]) ? property["Cooling"].join(";") : ""
+      ),
+      escapeCsvField(
+        Array.isArray(property["Heating"]) ? property["Heating"].join(";") : ""
+      ),
       property["FireplaceYN"],
-      escapeCsvField(Array.isArray(property["Flooring"]) ? property["Flooring"].join(";") : ""),
+      escapeCsvField(
+        Array.isArray(property["Flooring"])
+          ? property["Flooring"].join(";")
+          : ""
+      ),
       property["GarageYN"],
       property["GarageSpaces"],
-      escapeCsvField(Array.isArray(property["PatioAndPorchFeatures"]) ? property["PatioAndPorchFeatures"].join(";") : ""),
-      escapeCsvField(Array.isArray(property["WaterSource"]) ? property["WaterSource"].join(";") : property["WaterSource"] ?? ""),
+      escapeCsvField(
+        Array.isArray(property["PatioAndPorchFeatures"])
+          ? property["PatioAndPorchFeatures"].join(";")
+          : ""
+      ),
+      escapeCsvField(
+        Array.isArray(property["WaterSource"])
+          ? property["WaterSource"].join(";")
+          : property["WaterSource"] ?? ""
+      ),
       property["WaterfrontYN"],
-      escapeCsvField(Array.isArray(property["Sewer"]) ? property["Sewer"].join(";") : property["Sewer"] ?? ""),
-      escapeCsvField(Array.isArray(property["ElementarySchool"]) ? property["ElementarySchool"].join(";") : property["ElementarySchool"] ?? ""),
-      escapeCsvField(Array.isArray(property["MiddleOrJuniorSchool"]) ? property["MiddleOrJuniorSchool"].join(";") : property["MiddleOrJuniorSchool"] ?? ""),
-      escapeCsvField(Array.isArray(property["HighSchool"]) ? property["HighSchool"].join(";") : property["HighSchool"] ?? ""),
+      escapeCsvField(
+        Array.isArray(property["Sewer"])
+          ? property["Sewer"].join(";")
+          : property["Sewer"] ?? ""
+      ),
+      escapeCsvField(
+        Array.isArray(property["ElementarySchool"])
+          ? property["ElementarySchool"].join(";")
+          : property["ElementarySchool"] ?? ""
+      ),
+      escapeCsvField(
+        Array.isArray(property["MiddleOrJuniorSchool"])
+          ? property["MiddleOrJuniorSchool"].join(";")
+          : property["MiddleOrJuniorSchool"] ?? ""
+      ),
+      escapeCsvField(
+        Array.isArray(property["HighSchool"])
+          ? property["HighSchool"].join(";")
+          : property["HighSchool"] ?? ""
+      ),
       escapeCsvField(property["Zoning"]),
       property["CumulativeDaysOnMarket"],
       property["DaysOnMarket"],
@@ -146,7 +219,6 @@ const ExportToCSVButton = ({
       escapeCsvField(property["PublicRemarks"]),
       escapeCsvField(property["PrivateRemarks"]),
     ]);
-
 
     const csvData = [
       headers.join(","),

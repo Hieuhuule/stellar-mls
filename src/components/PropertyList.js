@@ -162,6 +162,7 @@ const PropertyList = (props) => {
               ageFilter,
               filterDaysOnMarketDifference,
               priceRangeFilter,
+              cityFilters,
             }}
             excludedSubtypes={excludedSubtypes}
             excludedCounty={excludedCounty}
