@@ -18,8 +18,8 @@ function handleApiResponse(response) {
   allResults.push(...response.value);
 
   if (response['@odata.nextLink']) {
-  //   requestApiData(response['@odata.nextLink']);
-  // } else {
+    requestApiData(response['@odata.nextLink']);
+  } else {
     console.log("All data retrieved successfully.");
     console.log(allResults); // log all the results when finished
 
