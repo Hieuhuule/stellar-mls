@@ -119,43 +119,23 @@ const ExportToCSVButton = ({
       property["PropertyType"],
       property["PropertySubType"],
       escapeCsvField(property["MFR_PropertyDescription"]),
-      escapeCsvField((property?.["ConstructionMaterials"] ?? []).join(";")),
-      escapeCsvField((property?.["CommunityFeatures"] ?? []).join(";")),
-      escapeCsvField((property?.["PoolFeatures"] ?? []).join(";")),
+      escapeCsvField(Array.isArray(property["ConstructionMaterials"]) ? property["ConstructionMaterials"].join(";") : ""),
+      escapeCsvField(Array.isArray(property["CommunityFeatures"]) ? property["CommunityFeatures"].join(";") : ""),
+      escapeCsvField(Array.isArray(property["PoolFeatures"]) ? property["PoolFeatures"].join(";") : ""),
       property["PoolPrivateYN"],
-      escapeCsvField((property?.["Cooling"] ?? []).join(";")),
-      escapeCsvField((property?.["Heating"] ?? []).join(";")),
+      escapeCsvField(Array.isArray(property["Cooling"]) ? property["Cooling"].join(";") : ""),
+      escapeCsvField(Array.isArray(property["Heating"]) ? property["Heating"].join(";") : ""),
       property["FireplaceYN"],
-      escapeCsvField((property?.["Flooring"] ?? []).join(";")),
+      escapeCsvField(Array.isArray(property["Flooring"]) ? property["Flooring"].join(";") : ""),
       property["GarageYN"],
       property["GarageSpaces"],
-      escapeCsvField((property?.["PatioAndPorchFeatures"] ?? []).join(";")),
-      escapeCsvField(
-        Array.isArray(property["WaterSource"])
-          ? property["WaterSource"].join(";")
-          : property["WaterSource"]
-      ),
+      escapeCsvField(Array.isArray(property["PatioAndPorchFeatures"]) ? property["PatioAndPorchFeatures"].join(";") : ""),
+      escapeCsvField(Array.isArray(property["WaterSource"]) ? property["WaterSource"].join(";") : property["WaterSource"] ?? ""),
       property["WaterfrontYN"],
-      escapeCsvField(
-        Array.isArray(property["Sewer"])
-          ? property["Sewer"].join(";")
-          : property["Sewer"]
-      ),
-      escapeCsvField(
-        Array.isArray(property["ElementarySchool"])
-          ? property["ElementarySchool"].join(";")
-          : property["ElementarySchool"]
-      ),
-      escapeCsvField(
-        Array.isArray(property["MiddleOrJuniorSchool"])
-          ? property["MiddleOrJuniorSchool"].join(";")
-          : property["MiddleOrJuniorSchool"]
-      ),
-      escapeCsvField(
-        Array.isArray(property["HighSchool"])
-          ? property["HighSchool"].join(";")
-          : property["HighSchool"]
-      ),
+      escapeCsvField(Array.isArray(property["Sewer"]) ? property["Sewer"].join(";") : property["Sewer"] ?? ""),
+      escapeCsvField(Array.isArray(property["ElementarySchool"]) ? property["ElementarySchool"].join(";") : property["ElementarySchool"] ?? ""),
+      escapeCsvField(Array.isArray(property["MiddleOrJuniorSchool"]) ? property["MiddleOrJuniorSchool"].join(";") : property["MiddleOrJuniorSchool"] ?? ""),
+      escapeCsvField(Array.isArray(property["HighSchool"]) ? property["HighSchool"].join(";") : property["HighSchool"] ?? ""),
       escapeCsvField(property["Zoning"]),
       property["CumulativeDaysOnMarket"],
       property["DaysOnMarket"],
@@ -166,6 +146,7 @@ const ExportToCSVButton = ({
       escapeCsvField(property["PublicRemarks"]),
       escapeCsvField(property["PrivateRemarks"]),
     ]);
+
 
     const csvData = [
       headers.join(","),
