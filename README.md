@@ -1,4 +1,6 @@
 Here's the steps to run the Stellar MLS database, all the commands will be in bash terminal.
+* You will need to have Node and Python installed on your computer.
+* For Python, also run 'pip install pandas' and 'pip install mysql-connector-python'
 * Be sure to run npm install before running any of the following commands.
 * You may need to run 'npm install json2csv'
 
