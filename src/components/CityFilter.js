@@ -8,6 +8,7 @@ const CityFilterList = ({
   excludedCounty,
 }) => {
   const [cities, setCities] = useState([]);
+  const [visible, setVisible] = useState(true);
 
   useEffect(() => {
     const uniqueCities = Array.from(
@@ -25,7 +26,7 @@ const CityFilterList = ({
     setCities(uniqueCities);
   }, [properties, excludedCounty]);
 
-  const handleCitySelectChange = (event) => {
+  const handleCityCheckboxChange = (event) => {
     const { value } = event.target;
     setCityFilters((prevState) => ({
       ...prevState,
@@ -34,20 +35,24 @@ const CityFilterList = ({
   };
 
   return (
-    <div className={styles.cityFilterContainer}>
-      <h3>City Filters</h3>
-      <select
-        value={cityFilters}
-        onChange={handleCitySelectChange}
-        className={styles.citySelect}
-      >
-        <option value="">Select a City</option>
-        {cities.map((city) => (
-          <option key={city} value={city}>
-            {city}
-          </option>
-        ))}
-      </select>
+    <div>
+      <button className={styles.toggleButton} onClick={() => setVisible(!visible)}>Toggle City Filters</button>
+      {visible && (
+        <div className={styles.cityFilterContainer}>
+          {cities.map((city) => (
+            <div key={city}>
+              <input
+                type="checkbox"
+                id={city}
+                value={city}
+                checked={!!cityFilters[city]}
+                onChange={handleCityCheckboxChange}
+              />
+              <label htmlFor={city}>{city}</label>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
